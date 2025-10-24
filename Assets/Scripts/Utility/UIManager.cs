@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class UIManager : MonoBehaviour
 {
@@ -14,6 +15,19 @@ public class UIManager : MonoBehaviour
         basePanel.SetActive(true);
         spellPanel.SetActive(false);
         itemPanel.SetActive(false);
+    }
+
+    private void Update()
+    {
+        if (Keyboard.current.escapeKey.wasPressedThisFrame)
+        {
+            if (!basePanel.activeInHierarchy)
+            {
+                basePanel.SetActive(true);
+                spellPanel.SetActive(false);
+                itemPanel.SetActive(false);
+            }
+        }
     }
 
     #region Base Panel
