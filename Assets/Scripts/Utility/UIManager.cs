@@ -11,6 +11,8 @@ public class UIManager : MonoBehaviour
 
     public List<Enemy> currentEnemies;
 
+    private Encounter currentEncounter;
+
     private void Start()
     {
         UI.SetActive(true);
@@ -18,6 +20,8 @@ public class UIManager : MonoBehaviour
         basePanel.SetActive(true);
         spellPanel.SetActive(false);
         itemPanel.SetActive(false);
+
+        CombatManager.Instance.OnEncounterBegin += UpdateEncounter;
     }
 
     private void Update()
@@ -33,11 +37,16 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    private void UpdateEncounter(Encounter encounter)
+    {
+        currentEncounter = encounter;
+    }
+
     #region Base Panel
 
     public void Attack()
     {
-        // TO-DO: Attack
+        
     }
 
     public void Spell()
