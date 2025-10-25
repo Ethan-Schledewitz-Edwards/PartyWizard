@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Encounter : MonoBehaviour
 {
-	[SerializeField] private Enemy[] m_enemies;
+	[field: SerializeField] public Enemy[] Enemies;
 
 	[SerializeField] public EncounterTrigger EncounterTrigger;
 

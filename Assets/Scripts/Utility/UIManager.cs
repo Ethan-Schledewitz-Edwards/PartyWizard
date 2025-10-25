@@ -9,19 +9,19 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject spellPanel;
     [SerializeField] private GameObject itemPanel;
 
-    public List<Enemy> currentEnemies;
+    public Enemy[] currentEnemies;
 
     private Encounter currentEncounter;
 
     private void Start()
     {
-        UI.SetActive(true);
+        UI.SetActive(false);
 
         basePanel.SetActive(true);
         spellPanel.SetActive(false);
         itemPanel.SetActive(false);
 
-        CombatManager.Instance.OnEncounterBegin += UpdateEncounter;
+        CombatManager.Instance.OnEncounterBegin += BeginEncounter;
     }
 
     private void Update()
@@ -37,10 +37,13 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    private void UpdateEncounter(Encounter encounter)
+    private void BeginEncounter(Encounter encounter)
     {
         currentEncounter = encounter;
-    }
+		currentEnemies = encounter.Enemies;
+
+		UI.SetActive(true);
+	}
 
     #region Base Panel
 

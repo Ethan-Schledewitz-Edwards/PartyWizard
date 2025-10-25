@@ -15,6 +15,7 @@ public class CombatManager : MonoBehaviour
 	// Events
 	public Action<Encounter> OnEncounterBegin;
 	public Action<Encounter> OnEncounterEnd;
+	public Action OnNavigationBegin;
 
 	private void Awake()
 	{
@@ -27,7 +28,8 @@ public class CombatManager : MonoBehaviour
 	private void Start()
 	{
 		encounterIndex = 0;
-		BeginEncounter(encounterIndex);
+
+		OnNavigationBegin?.Invoke();
 	}
 
 	private void BeginEncounter(int encounterID)

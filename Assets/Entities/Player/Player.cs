@@ -41,8 +41,13 @@ public class Player : Entity
 	{
 		base.Start();
 
-		CombatManager.Instance.OnEncounterEnd += StartMovement;
-		StartMovement(null);
+		CombatManager.Instance.OnNavigationBegin += StartMovement;
+		StartMovement();
+	}
+
+	public override void Die()
+	{
+		Debug.Log("Player is dead");
 	}
 
 	#region Adrenaline
@@ -73,7 +78,7 @@ public class Player : Entity
 
 	#region Physics
 
-	public void StartMovement(Encounter encounter)
+	public void StartMovement()
 	{
 		m_isAccelerating = true;
 		m_isBraking = false;
