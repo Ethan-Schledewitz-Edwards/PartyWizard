@@ -28,8 +28,6 @@ public class Player : Entity
 	private bool m_isBraking = false;
 	private bool m_isStopped = false;
 
-	private float m_progressOnSpline = 0f;
-
 	private void Awake()
 	{
 		m_rb = GetComponent<Rigidbody>();
