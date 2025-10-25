@@ -13,7 +13,7 @@ public class Player : Entity
 	private const float k_acceleration = 4f;
 	private const float k_maxSpeed = 3f;
 	private const float k_rotSpeed = 10f;
-	private const float k_brakeForce = 0.25f;
+	private const float k_brakeForce = 5f;
 	private const float k_stopThreshold = 0.5f;
 
 	// Rails
@@ -24,7 +24,7 @@ public class Player : Entity
 
 	// System
 	private Vector3 m_velocity;
-	private bool m_isAccelerating = true;
+	private bool m_isAccelerating = false;
 	private bool m_isBraking = false;
 	private bool m_isStopped = false;
 
@@ -39,12 +39,23 @@ public class Player : Entity
 		m_currentSpline = m_railNetwork != null ? m_railNetwork.Splines[0] : null;
 	}
 
+	protected override void Start()
+	{
+		base.Start();
+
+		CombatManager.Instance.OnEncounterEnd += StartMovement;
+		StartMovement(null);
+	}
+
+	#region Adrenaline
+
 	public void SetAdrenaline(int value)
 	{
 		Adrenaline = Mathf.Clamp(value, 0, MaxAdrenaline);
 	}
 
 	public void RemoveAdrenaline(int value) => SetAdrenaline(Adrenaline - value);
+	#endregion
 
 	private void FixedUpdate()
 	{
@@ -52,7 +63,7 @@ public class Player : Entity
 		{
 			if (m_isAccelerating && !m_isBraking)
 			{
-				Throttle(k_acceleration);
+				Accelerate(k_acceleration);
 			}
 		}
 
@@ -62,7 +73,22 @@ public class Player : Entity
 		SnapToRail();
 	}
 
-	private void Throttle(float power)
+	#region Physics
+
+	public void StartMovement(Encounter encounter)
+	{
+		m_isAccelerating = true;
+		m_isBraking = false;
+		m_isStopped = false;
+	}
+
+	public void StopMovement()
+	{
+		m_isAccelerating = false;
+		m_isBraking = true;
+	}
+
+	private void Accelerate(float power)
 	{
 		Vector3 newVel = m_velocity + (transform.forward * power * Time.deltaTime);
 		SetVelocity(newVel);
@@ -71,25 +97,12 @@ public class Player : Entity
 	public void SnapToRail()
 	{
 		if (m_currentSpline == null) return;
-
 		NativeSpline spline = new NativeSpline(m_currentSpline);
-		float splineLength = spline.GetLength();
-
-		float t = m_velocity.magnitude * Time.fixedDeltaTime / splineLength;
-		m_progressOnSpline += t;
-
-		if (m_progressOnSpline >= 1f)
-		{
-			m_progressOnSpline = 1f;// Stop at the end
-			m_isStopped = true;
-			SetVelocity(Vector3.zero);
-		}
 
 		// Update Pos
-		Vector3 newPosition = (Vector3)spline.EvaluatePosition(m_progressOnSpline);
-		Vector3 tangentDir = Vector3.Normalize(spline.EvaluateTangent(m_progressOnSpline));
-		Vector3 up = spline.EvaluateUpVector(m_progressOnSpline);
-		m_rb.MovePosition(newPosition);
+		SplineUtility.GetNearestPoint(spline, transform.position, out float3 nearest, out float t);
+		Vector3 tangentDir = Vector3.Normalize(spline.EvaluateTangent(t));
+		Vector3 up = spline.EvaluateUpVector(t);
 
 		// Update Rotation
 		Quaternion targetRot = Quaternion.LookRotation(tangentDir, up);
@@ -97,8 +110,10 @@ public class Player : Entity
 		m_rb.MoveRotation(smoothRot);
 
 		// Set vel
-		Vector3 velocityAlongSpline = tangentDir * t;
+		Vector3 velocityAlongSpline = tangentDir * m_velocity.magnitude;
 		SetVelocity(velocityAlongSpline);
+
+		m_rb.MovePosition((Vector3)nearest + m_velocity * Time.fixedDeltaTime);
 
 		// Apply brake force
 		if (m_isBraking)
@@ -121,6 +136,6 @@ public class Player : Entity
 	{
 		newVel = Vector3.ClampMagnitude(newVel, m_isStopped ? 0 : k_maxSpeed);
 		m_velocity = newVel;
-		Debug.Log(m_velocity);
 	}
+	#endregion
 }

@@ -50,6 +50,8 @@ public class CombatManager : MonoBehaviour
 	public void AdvanceEncouner()
 	{
 		encounterIndex++;
-		BeginEncounter(encounterIndex);
+
+		if (encounterIndex < m_encounters.Length)
+			BeginEncounter(encounterIndex);
 	}
 }

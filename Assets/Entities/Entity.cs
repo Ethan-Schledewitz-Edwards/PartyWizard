@@ -5,7 +5,7 @@ public abstract class Entity : MonoBehaviour
 	public int Health { get; private set; }
 	public int MaxHealth { get; private set; } = 10;
 
-	public void Start()
+	protected virtual void Start()
 	{
 		Health = MaxHealth;
 	}

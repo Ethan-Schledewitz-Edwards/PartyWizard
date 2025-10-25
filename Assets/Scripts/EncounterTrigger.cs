@@ -16,6 +16,7 @@ public class EncounterTrigger : MonoBehaviour
 	{
 		if (other.CompareTag("Player"))
 		{
+			other.GetComponent<Player>().StopMovement();
 			CombatManager.Instance.AdvanceEncouner();
 		}
 	}
