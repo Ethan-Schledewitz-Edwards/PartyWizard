@@ -1,5 +1,4 @@
 using System;
-using System.Text;
 using UnityEngine;
 
 public class CombatManager : MonoBehaviour
@@ -11,7 +10,7 @@ public class CombatManager : MonoBehaviour
 
 	// System
 	private int encounterIndex;
-	private Encounter currentEncounter;
+	public Encounter currentEncounter;
 
 	// Events
 	public Action<Encounter> OnEncounterBegin;
