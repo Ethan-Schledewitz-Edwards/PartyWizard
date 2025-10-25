@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class FogManager : MonoBehaviour
 {
-	public float RGBScroll = 1;
+	[SerializeField] private float m_RGBScroll = 1;
 
 	void Start()
 	{
@@ -11,7 +11,7 @@ public class FogManager : MonoBehaviour
 
 	void Update()
 	{
-		float time = Time.time * RGBScroll;
+		float time = Time.time * m_RGBScroll;
 
 		Color rainbow = Color.HSVToRGB(time % 1f, 1f, 1f);
 		RenderSettings.fogColor = rainbow;
