@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5acd248af86c14748a49b1f0f3ef38d5, type: 3}
   m_Name: Attack_Punch
   m_EditorClassIdentifier: Assembly-CSharp::SO_Attack
-  <AttackName>k__BackingField: Attack
-  <Damage>k__BackingField: 10
-  <AdrenalineCost>k__BackingField: 10
-  <AttackDuration>k__BackingField: 1
+  <AttackName>k__BackingField: Punch
+  <Damage>k__BackingField: 2
+  <AdrenalineCost>k__BackingField: 0
+  <AttackDuration>k__BackingField: 0.2
+  <SoundEffect>k__BackingField: {fileID: 0}
   <ParticleSystem>k__BackingField: {fileID: 0}

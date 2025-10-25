@@ -14,4 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SO_EnemyStats
   <EnemyName>k__BackingField: Kingpin
   <BaseHealth>k__BackingField: 20
-  <Attacks>k__BackingField: []
+  <Attacks>k__BackingField:
+  - {fileID: 11400000, guid: aab800135ee003f40a79b1c5a50601c3, type: 2}

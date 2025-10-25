@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: Rocker_Stats
   m_EditorClassIdentifier: Assembly-CSharp::SO_EnemyStats
   <EnemyName>k__BackingField: Rocker
-  <BaseHealth>k__BackingField: 7
-  <Attacks>k__BackingField: []
+  <BaseHealth>k__BackingField: 12
+  <Attacks>k__BackingField:
+  - {fileID: 11400000, guid: aab800135ee003f40a79b1c5a50601c3, type: 2}
