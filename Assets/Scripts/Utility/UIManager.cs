@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -7,6 +8,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject basePanel;
     [SerializeField] private GameObject spellPanel;
     [SerializeField] private GameObject itemPanel;
+
+    public List<Enemy> currentEnemies;
 
     private void Start()
     {
