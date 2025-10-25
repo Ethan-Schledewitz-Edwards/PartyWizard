@@ -7173,17 +7173,17 @@ MonoBehaviour:
       TangentIn:
         x: 0
         y: 0
-        z: -3.0169194
+        z: 0
       TangentOut:
         x: 0
         y: 0
-        z: 0.9615284
+        z: 0
       Rotation:
         value:
-          x: -0.000000059211647
-          y: 0.08818147
-          z: -0.00000066885906
-          w: 0.9961044
+          x: -0.00000012281929
+          y: 0.3019495
+          z: -0.0000003877687
+          w: 0.9533239
     - Position:
         x: 3.1053925
         y: 0
@@ -7349,7 +7349,7 @@ MonoBehaviour:
     m_MetaData:
     - Mode: 1
       Tension: 0.5
-    - Mode: 3
+    - Mode: 1
       Tension: 0.5
     - Mode: 0
       Tension: 0.5
@@ -7389,7 +7389,7 @@ Transform:
   m_GameObject: {fileID: 1959877025}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.024607778, y: -2.0000002, z: -11.8597765}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -7758,6 +7758,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1755188725958035053, guid: cd6f7826c1eb56e43a8e844bd9628f8e, type: 3}
+      propertyPath: m_railNetwork
+      value: 
+      objectReference: {fileID: 1959877026}
     - target: {fileID: 2444843490133506097, guid: cd6f7826c1eb56e43a8e844bd9628f8e, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -7768,7 +7772,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2444843490133506097, guid: cd6f7826c1eb56e43a8e844bd9628f8e, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -14.17
+      value: -11.77
       objectReference: {fileID: 0}
     - target: {fileID: 2444843490133506097, guid: cd6f7826c1eb56e43a8e844bd9628f8e, type: 3}
       propertyPath: m_LocalRotation.w
