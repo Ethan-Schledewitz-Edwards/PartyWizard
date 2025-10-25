@@ -28,7 +28,7 @@ public class Player : Entity
 	private bool m_isBraking = false;
 	private bool m_isStopped = false;
 
-	private float m_currentT = 0f;
+	private float m_progressOnSpline = 0f;
 
 	private void Awake()
 	{
@@ -73,24 +73,22 @@ public class Player : Entity
 		if (m_currentSpline == null) return;
 
 		NativeSpline spline = new NativeSpline(m_currentSpline);
-
-		float currentSpeed = m_velocity.magnitude;
 		float splineLength = spline.GetLength();
 
-		float deltaT = currentSpeed * Time.fixedDeltaTime / splineLength;
-		m_currentT += deltaT;
+		float t = m_velocity.magnitude * Time.fixedDeltaTime / splineLength;
+		m_progressOnSpline += t;
 
-		if (m_currentT >= 1f)
+		if (m_progressOnSpline >= 1f)
 		{
-			m_currentT = 1f;// Stop at the end
+			m_progressOnSpline = 1f;// Stop at the end
 			m_isStopped = true;
 			SetVelocity(Vector3.zero);
 		}
 
 		// Update Pos
-		Vector3 newPosition = (Vector3)spline.EvaluatePosition(m_currentT);
-		Vector3 tangentDir = Vector3.Normalize(spline.EvaluateTangent(m_currentT));
-		Vector3 up = spline.EvaluateUpVector(m_currentT);
+		Vector3 newPosition = (Vector3)spline.EvaluatePosition(m_progressOnSpline);
+		Vector3 tangentDir = Vector3.Normalize(spline.EvaluateTangent(m_progressOnSpline));
+		Vector3 up = spline.EvaluateUpVector(m_progressOnSpline);
 		m_rb.MovePosition(newPosition);
 
 		// Update Rotation
@@ -99,7 +97,7 @@ public class Player : Entity
 		m_rb.MoveRotation(smoothRot);
 
 		// Set vel
-		Vector3 velocityAlongSpline = tangentDir * currentSpeed;
+		Vector3 velocityAlongSpline = tangentDir * t;
 		SetVelocity(velocityAlongSpline);
 
 		// Apply brake force

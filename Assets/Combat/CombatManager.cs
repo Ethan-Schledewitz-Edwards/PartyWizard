@@ -33,11 +33,11 @@ public class CombatManager : MonoBehaviour
 
 	private void BeginEncounter(int encounterID)
 	{
-		Encounter encouner = m_encounters[encounterID];
+		Encounter encounter = m_encounters[encounterID];
 
 		//m_player.transform.position = encouner.PlayerPos.position;
 
-		OnEncounterBegin?.Invoke(encouner);
+		OnEncounterBegin?.Invoke(encounter);
 	}
 
 	private void FinishEncounter()
