@@ -1717,6 +1717,78 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7d72b351c250954d85815e63dd610f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LightFlicker
+--- !u!1001 &528439128
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 50842613914891712, guid: 41ea325bc290ca64cbb294d2cc8c278d, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 50842613914891712, guid: 41ea325bc290ca64cbb294d2cc8c278d, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -1.85
+      objectReference: {fileID: 0}
+    - target: {fileID: 50842613914891712, guid: 41ea325bc290ca64cbb294d2cc8c278d, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 50842613914891712, guid: 41ea325bc290ca64cbb294d2cc8c278d, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 50842613914891712, guid: 41ea325bc290ca64cbb294d2cc8c278d, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 50842613914891712, guid: 41ea325bc290ca64cbb294d2cc8c278d, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 50842613914891712, guid: 41ea325bc290ca64cbb294d2cc8c278d, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 50842613914891712, guid: 41ea325bc290ca64cbb294d2cc8c278d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 50842613914891712, guid: 41ea325bc290ca64cbb294d2cc8c278d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 50842613914891712, guid: 41ea325bc290ca64cbb294d2cc8c278d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 864534697683267450, guid: 41ea325bc290ca64cbb294d2cc8c278d, type: 3}
+      propertyPath: m_Name
+      value: highlight_circle
+      objectReference: {fileID: 0}
+    - target: {fileID: 864534697683267450, guid: 41ea325bc290ca64cbb294d2cc8c278d, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 41ea325bc290ca64cbb294d2cc8c278d, type: 3}
+--- !u!114 &528439129 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 9026399311324803908, guid: 41ea325bc290ca64cbb294d2cc8c278d, type: 3}
+  m_PrefabInstance: {fileID: 528439128}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9cc0b95a0c3010c4caf8b0ac3c6a8329, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemySelector
 --- !u!1 &535894246
 GameObject:
   m_ObjectHideFlags: 0
@@ -8954,6 +9026,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 179364868245245482, guid: d5cdcaddf5b74ac4396225fe719863b7, type: 3}
+      propertyPath: m_inputActions
+      value: 
+      objectReference: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+    - target: {fileID: 179364868245245482, guid: d5cdcaddf5b74ac4396225fe719863b7, type: 3}
+      propertyPath: m_enemySelector
+      value: 
+      objectReference: {fileID: 528439129}
     - target: {fileID: 715575079541672631, guid: d5cdcaddf5b74ac4396225fe719863b7, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -9031,3 +9111,4 @@ SceneRoots:
   - {fileID: 6446085663752537902}
   - {fileID: 1550972151}
   - {fileID: 387715145}
+  - {fileID: 528439128}
