@@ -2,11 +2,13 @@ using UnityEngine;
 
 public class EnemySelector : MonoBehaviour
 {
+    [SerializeField] private float targetY;
+
     public void SelectEnemy(Transform enemy)
     {
         Vector3 target = enemy.position;
 
-        target.y = 1f; // position to be placed just above the enemy
+        target.y = targetY; // position to be placed along the y-axis
 
         transform.position = target;
     }

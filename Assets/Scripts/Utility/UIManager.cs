@@ -19,6 +19,8 @@ public class UIManager : MonoBehaviour
 	[SerializeField] private SpinningWheel m_spinningwheel;
 
 	[SerializeField] private EnemySelector m_enemySelector;
+	[SerializeField] private EnemySelector m_particleEffects;
+	[SerializeField] private ParticleSystem m_particleSystem;
 
 	[Header("Text Box")]
 	[SerializeField] private GameObject m_textPanel;
@@ -305,6 +307,9 @@ public class UIManager : MonoBehaviour
 
 		// Perform attack on enemy
 		combatManager.AttackEntity(combatManager.Player, m_currentEnemies[m_highlightedEnemy], attackData);
+
+		m_particleEffects.SelectEnemy(m_currentEnemies[m_highlightedEnemy].gameObject.transform);
+		m_particleSystem.Play();
 
 		DisplayPlayerOptions(false); // TO-DO: this can probably be removed
 	}
