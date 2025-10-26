@@ -11,7 +11,9 @@ public abstract class Entity : MonoBehaviour
 	[field: SerializeField] public SO_Attack[] BaseAttacks { get; protected set; }
 
 	// System
-	public bool IsDead;
+	public bool IsGuarding { get; private set; } = false;
+	public bool WasPrevTurnGuarded { get; private set; } = false;
+	public bool IsDead { get; private set; } = false;
 
 	protected virtual void Start()
 	{
@@ -38,4 +40,13 @@ public abstract class Entity : MonoBehaviour
 	} 
 
 	public void AddHealth(int value) => SetHealth(Health + value);
+
+	public void SetIsGuarding(bool isGuarding)
+	{
+		// Store prev turns guard state when setting to false
+		if (!isGuarding)
+			WasPrevTurnGuarded = IsGuarding;
+
+		IsGuarding = isGuarding;
+	}
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.UIElements;
+using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
@@ -15,6 +15,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject m_basePanel;
     [SerializeField] private GameObject m_itemPanel;
 	[SerializeField] private SpellButton m_spellButton;
+	[SerializeField] private Slider m_healthSlider;
 	[SerializeField] private Slider m_adrenalineSlider;
 
 	[Header("Text Box")]
@@ -155,8 +156,13 @@ public class UIManager : MonoBehaviour
 		m_basePanel.SetActive(true);
 		m_itemPanel.SetActive(false);
 
+		// Refresh current spell
 		Player player = CombatManager.Instance.Player;
 		m_spellButton.SetSpell(player.CurrentSpell);
+
+		// Refresh health and adrenaline bars
+		m_healthSlider.value = player.MaxHealth/ player.Health;
+		m_adrenalineSlider.value = player.MaxAdrenaline/ player.Adrenaline;
 	}
 
 	#region Player Options
@@ -172,8 +178,11 @@ public class UIManager : MonoBehaviour
 
 	public void GuardButton()
     {
-        // TO-DO: Guard
-    }
+		CombatManager combatManager = CombatManager.Instance;
+		Player player = combatManager.Player;
+
+		combatManager.EntityGuard(player);
+	}
 
     public void ItemButton()
     {

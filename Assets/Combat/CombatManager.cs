@@ -40,6 +40,8 @@ public class CombatManager : MonoBehaviour
 
 	private void BeginEncounter(int encounterID)
 	{
+		Player.SetIsGuarding(false);
+
 		currentEncounter = m_encounters[encounterID];
 		OnEncounterBegin?.Invoke(currentEncounter);
 
@@ -125,10 +127,25 @@ public class CombatManager : MonoBehaviour
 		AttackEntity(enemy, Player, enemy.BaseAttacks[rand]);
 	}
 
-	private IEnumerator PlayAttackAnim(Entity instigator, Entity victim, SO_Attack attackData)
+	private IEnumerator PlayAttackAnim(Entity instigator, Entity victim, SO_Attack attackData, bool isAttackBlocked, bool isAttackSucsesful)
 	{
 		UIManager.Instance.AddStringToTextQueue($"{instigator.name} used {attackData.AttackName} on {victim.name}!");
-		UIManager.Instance.AddStringToTextQueue($"It dealt {attackData.Damage} damage!");
+
+		if (!isAttackBlocked)
+			UIManager.Instance.AddStringToTextQueue($"It dealt {attackData.Damage} damage!");
+		else 
+		{
+			if (!isAttackSucsesful)
+			{
+				UIManager.Instance.AddStringToTextQueue($"{victim.name} blocked {instigator.name}'s {attackData.AttackName}!");
+				UIManager.Instance.AddStringToTextQueue($"{victim.name} took 0 damage!");
+			}
+			else
+			{
+				UIManager.Instance.AddStringToTextQueue($"{victim.name}'s guard was broken!");
+				UIManager.Instance.AddStringToTextQueue($"{instigator.name}'s {attackData.AttackName} dealt {attackData.Damage} damage to {victim.name}!");
+			}
+		}
 
 		UIManager.Instance.PlayTextQueue();
 
@@ -136,16 +153,39 @@ public class CombatManager : MonoBehaviour
 		yield return new WaitForSeconds(attackData.AttackDuration);
 
 		// Deal damage
-		victim.RemoveHealth(attackData.Damage, out bool isDead);
-		if (isDead)
+		if (isAttackSucsesful)
 		{
-			UIManager.Instance.AddStringToTextQueue($"{victim.name} was slain!");
-			UIManager.Instance.PlayTextQueue();
+			victim.RemoveHealth(attackData.Damage, out bool isDead);
+			if (isDead)
+			{
+				UIManager.Instance.AddStringToTextQueue($"{victim.name} was slain!");
+				UIManager.Instance.PlayTextQueue();
+			}
+			victim.SetIsGuarding(false);
 		}
 
+		// Wait for text to finish (UIManager handles it)
+		yield return new WaitUntil(() => !UIManager.Instance.IsPrintingTextQueue);
 
-		// Apply damage to victim
+		// Delay
+		yield return new WaitForSeconds(.5f);
 
+		if (!isPlayerPhase)
+		{
+			enemiesProcessed++;
+			ProcessEntityTurn();
+		}
+		else
+		{
+			EndPlayerTurn();
+		}
+
+	}
+
+	private IEnumerator PlayGuardAnim(Entity instigator)
+	{
+		UIManager.Instance.AddStringToTextQueue($"{instigator.name} raised their guard!");
+		UIManager.Instance.PlayTextQueue();
 
 		// Wait for text to finish (UIManager handles it)
 		yield return new WaitUntil(() => !UIManager.Instance.IsPrintingTextQueue);
@@ -173,39 +213,34 @@ public class CombatManager : MonoBehaviour
 	{
 		UIManager.Instance.HideTextPanel();
 
+		bool isGuarding = victim.IsGuarding;
+
+		// Remove adrenaline
+		if (instigator is Player player)
+			player.RemoveAdrenaline(attackData.AdrenalineCost);
+
+		// Break through guard if prev turn was guarded
+		bool isAttackSuccsesful = true;
+		if(isGuarding && !victim.WasPrevTurnGuarded)
+			isAttackSuccsesful = false;
+
+		// Reset guard
+		if (isGuarding)
+			victim.SetIsGuarding(false);
+
 		// Start attack anim
-		StartCoroutine(PlayAttackAnim(instigator, victim, attackData));
+		StartCoroutine(PlayAttackAnim(instigator, victim, attackData, isGuarding, isAttackSuccsesful));
+	}
+
+	public void EntityGuard(Entity entity)
+	{
+		UIManager.Instance.HideTextPanel();
+
+		entity.SetIsGuarding(true);
+
+		// Start attack anim
+		StartCoroutine(PlayGuardAnim(entity));
 	}
 
 	#endregion
-
-	/*
-	public void EntityDied(Entity entity)
-	{
-		if(entity == null)
-			return;
-
-		if(entity is Player player)
-		{
-			// Game over
-		}
-		else if (entity is Enemy enemy)
-		{
-			// Check if all enemies are dead
-			bool isEncounterDefeated = true;
-			foreach (Enemy i in currentEncounter.Enemies)
-			{
-				if(!i.IsDead)
-				{
-					isEncounterDefeated = false;
-					break;
-				}
-			}
-
-			if (isEncounterDefeated)
-				FinishEncounter();
-		}
-
-	}
-	*/
 }

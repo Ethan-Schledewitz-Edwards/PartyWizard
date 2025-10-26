@@ -32,7 +32,6 @@ public class Player : Entity
 	private bool m_isBraking = false;
 	private bool m_isStopped = false;
 
-
 	#region Initialization methods
 
 	private void Awake()
@@ -47,6 +46,8 @@ public class Player : Entity
 	protected override void Start()
 	{
 		base.Start();
+
+		Adrenaline = MaxAdrenaline;
 
 		CombatManager.Instance.OnEncounterEnd += StartMovement;
 		StartMovement();
