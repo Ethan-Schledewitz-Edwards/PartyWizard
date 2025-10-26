@@ -285,7 +285,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy
   <BaseAttacks>k__BackingField: []
-  IsDead: 0
   m_baseStats: {fileID: 11400000, guid: b1ad01b65e7edec478244a6ff2d662dc, type: 2}
 --- !u!1 &25126868
 GameObject:
@@ -1137,7 +1136,7 @@ MonoBehaviour:
     m_HighlightedColor: {r: 1, g: 1, b: 1, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_SelectedColor: {r: 0.93710685, g: 0.93710685, b: 0.93710685, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_DisabledColor: {r: 0.2924528, g: 0.2924528, b: 0.2924528, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -1656,7 +1655,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy
   <BaseAttacks>k__BackingField: []
-  IsDead: 0
   m_baseStats: {fileID: 11400000, guid: 8a7bc90c9119fab47a511785243d83e0, type: 2}
 --- !u!1 &312008448
 GameObject:
@@ -1987,7 +1985,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy
   <BaseAttacks>k__BackingField: []
-  IsDead: 0
   m_baseStats: {fileID: 11400000, guid: 79305206a56fa6343a51cbb2a925e306, type: 2}
 --- !u!1 &387715143
 GameObject:
@@ -2720,7 +2717,7 @@ MonoBehaviour:
     m_HighlightedColor: {r: 1, g: 1, b: 1, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_SelectedColor: {r: 0.93710685, g: 0.93710685, b: 0.93710685, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_DisabledColor: {r: 0.2924528, g: 0.2924528, b: 0.2924528, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -3038,7 +3035,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy
   <BaseAttacks>k__BackingField: []
-  IsDead: 0
   m_baseStats: {fileID: 11400000, guid: a27f5e8820827d843bbe14d8ee96b7f6, type: 2}
 --- !u!1 &606048645
 GameObject:
@@ -4580,7 +4576,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy
   <BaseAttacks>k__BackingField: []
-  IsDead: 0
   m_baseStats: {fileID: 11400000, guid: 8a7bc90c9119fab47a511785243d83e0, type: 2}
 --- !u!1 &779376539
 GameObject:
@@ -4765,7 +4760,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy
   <BaseAttacks>k__BackingField: []
-  IsDead: 0
   m_baseStats: {fileID: 11400000, guid: b1ad01b65e7edec478244a6ff2d662dc, type: 2}
 --- !u!1 &783739067
 GameObject:
@@ -5128,7 +5122,7 @@ MonoBehaviour:
     m_HighlightedColor: {r: 1, g: 1, b: 1, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_SelectedColor: {r: 0.93710685, g: 0.93710685, b: 0.93710685, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_DisabledColor: {r: 0.2924528, g: 0.2924528, b: 0.2924528, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -6033,7 +6027,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy
   <BaseAttacks>k__BackingField: []
-  IsDead: 0
   m_baseStats: {fileID: 11400000, guid: 091ec96ad39b7e644beab6428f9e9860, type: 2}
 --- !u!1 &998267781
 GameObject:
@@ -7507,7 +7500,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy
   <BaseAttacks>k__BackingField: []
-  IsDead: 0
   m_baseStats: {fileID: 11400000, guid: 091ec96ad39b7e644beab6428f9e9860, type: 2}
 --- !u!1 &1226763618
 GameObject:
@@ -7872,6 +7864,8 @@ MonoBehaviour:
   m_basePanel: {fileID: 1912227841}
   m_itemPanel: {fileID: 121270205}
   m_spellButton: {fileID: 210496942}
+  m_healthSlider: {fileID: 745178748}
+  m_adrenalineSlider: {fileID: 1002723922}
   m_textPanel: {fileID: 293164620}
   m_textBox: {fileID: 126273767}
 --- !u!4 &1337501038
@@ -8678,7 +8672,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy
   <BaseAttacks>k__BackingField: []
-  IsDead: 0
   m_baseStats: {fileID: 11400000, guid: 091ec96ad39b7e644beab6428f9e9860, type: 2}
 --- !u!114 &1502113421
 MonoBehaviour:
@@ -10041,7 +10034,7 @@ MonoBehaviour:
     m_HighlightedColor: {r: 1, g: 1, b: 1, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_SelectedColor: {r: 0.93710685, g: 0.93710685, b: 0.93710685, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_DisabledColor: {r: 0.2924528, g: 0.2924528, b: 0.2924528, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -12079,7 +12072,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy
   <BaseAttacks>k__BackingField: []
-  IsDead: 0
   m_baseStats: {fileID: 11400000, guid: 091ec96ad39b7e644beab6428f9e9860, type: 2}
 --- !u!114 &2085419524
 MonoBehaviour:
