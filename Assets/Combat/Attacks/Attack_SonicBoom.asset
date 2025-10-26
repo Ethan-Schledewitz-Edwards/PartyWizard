@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Attack_SonicBoom
   m_EditorClassIdentifier: Assembly-CSharp::SO_Attack
   <AttackName>k__BackingField: Sonic Boom
-  <Damage>k__BackingField: 10
-  <AdrenalineCost>k__BackingField: 10
+  <Damage>k__BackingField: 4
+  <AdrenalineCost>k__BackingField: 3
   <AttackDuration>k__BackingField: 1
   <SoundEffect>k__BackingField: {fileID: 8300000, guid: 270a4ca4b3cf03b49a5b2a6136c86b96, type: 3}
   <ParticleSystem>k__BackingField: {fileID: 0}
