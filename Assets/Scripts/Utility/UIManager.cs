@@ -1,5 +1,5 @@
-using System;
 using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -22,11 +22,11 @@ public class UIManager : MonoBehaviour
 	[SerializeField] private TextMeshProUGUI m_textBox;
 
 	// System
-	private Encounter m_currentEncounter;
+	private Queue<string> m_stringsToType;
 	private Enemy[] m_currentEnemies;
+	private int m_highlightedEnemy;
 
-	public bool IsTextPrinting { get; private set; }
-	public Action OnTextFinished;
+	public bool IsPrintingTextQueue { get; private set; }
 
 	#region Initialization
 
@@ -36,6 +36,8 @@ public class UIManager : MonoBehaviour
 			Instance = this;
 		else
 			Destroy(this);
+
+		m_stringsToType = new Queue<string>();
 	}
 
 	private void Start()
@@ -48,7 +50,6 @@ public class UIManager : MonoBehaviour
 
 		CombatManager.Instance.OnEncounterBegin += BeginEncounter;
 		CombatManager.Instance.OnEncounterEnd += EndEncounter;
-		CombatManager.Instance.OnAttackPerformed += DisplayTextPanel;
 	}
 	#endregion
 
@@ -68,8 +69,8 @@ public class UIManager : MonoBehaviour
 
 	private void BeginEncounter(Encounter encounter)
     {
-        m_currentEncounter = encounter;
 		m_currentEnemies = encounter.Enemies;
+		m_highlightedEnemy = 0;
 
 		m_canvas.SetActive(true);
 		DisplayPlayerOptions(true);
@@ -79,36 +80,65 @@ public class UIManager : MonoBehaviour
 	{
 		m_canvas.SetActive(false);
 		DisplayPlayerOptions(false);
-		DoneText();
+		HideTextPanel();
 	}
 
-	public void DisplayTextPanel(string text)
+	#endregion
+
+	#region Text Queue
+
+	public void AddStringToTextQueue(string text)
 	{
+		m_stringsToType.Enqueue(text);
+	}
+
+	public void PlayTextQueue()
+	{
+		if (IsPrintingTextQueue || m_stringsToType.Count <= 0)
+			return;
+
 		DisplayPlayerOptions(false);
 		m_textPanel.SetActive(true);
 
 		StopAllCoroutines();
-		IsTextPrinting = true;
-		StartCoroutine(TypeText(text));
+		IsPrintingTextQueue = true;
+		StartCoroutine(ProcessTextQueue());
+	}
+
+	private IEnumerator ProcessTextQueue()
+	{
+		IsPrintingTextQueue = true;
+
+		while (m_stringsToType.Count > 0)
+		{
+			string nextText = m_stringsToType.Dequeue();
+			yield return StartCoroutine(TypeText(nextText));
+
+			// optional pause between messages
+			yield return new WaitForSeconds(0.5f);
+		}
+
+		HideTextPanel();
+		IsPrintingTextQueue = false;
 	}
 
 	private IEnumerator TypeText(string text)
 	{
 		m_textBox.text = "";
+
 		foreach (char c in text)
 		{
 			m_textBox.text += c;
 			yield return new WaitForSeconds(0.03f);// typing speed
 		}
 
-		DoneText();
+		yield return new WaitForSeconds(0.5f);// delay after message
 	}
 
-	public void DoneText()
+	public void HideTextPanel()
 	{
-		IsTextPrinting = false;
-		m_textPanel.SetActive(true);
-		OnTextFinished?.Invoke();
+		IsPrintingTextQueue = false;
+		m_textPanel.SetActive(false);
 	}
 	#endregion
 
@@ -155,7 +185,16 @@ public class UIManager : MonoBehaviour
     public void UseAttack(SO_Attack attackData)
     {
 		CombatManager combatManager = CombatManager.Instance;
-		combatManager.AttackEntity(combatManager.Player, m_currentEnemies[0], attackData);// To-Do: use the highlighted enemy
+
+		// Remove this once proper enemy highlights are implemented!!!
+		foreach (Enemy i in m_currentEnemies)
+		{
+			if (i.IsDead)
+				m_highlightedEnemy++;
+		}
+
+		// Perform attack on enemy
+		combatManager.AttackEntity(combatManager.Player, m_currentEnemies[m_highlightedEnemy], attackData);
 
 		DisplayPlayerOptions(false);
 	}

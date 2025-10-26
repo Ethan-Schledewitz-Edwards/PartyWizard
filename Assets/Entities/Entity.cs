@@ -12,7 +12,6 @@ public abstract class Entity : MonoBehaviour
 
 	// System
 	public bool IsDead;
-	public Action<Entity> OnDeath;
 
 	protected virtual void Start()
 	{
@@ -26,15 +25,17 @@ public abstract class Entity : MonoBehaviour
 		if(Health <= 0)
 		{
 			IsDead = true;
-			OnDeath?.Invoke(this);
-
 			Die();
 		}
 	}
 
 	public abstract void Die();
 
-	public void RemoveHealth(int value) => SetHealth(Health - value);
+	public void RemoveHealth(int value, out bool isDead)
+	{
+		SetHealth(Health - value);
+		isDead = IsDead;
+	} 
 
 	public void AddHealth(int value) => SetHealth(Health + value);
 }

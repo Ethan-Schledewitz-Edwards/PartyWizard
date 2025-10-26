@@ -11,6 +11,6 @@ public class Enemy : Entity
 
 	public override void Die()
 	{
-		Debug.Log("Player is dead");
+		gameObject.SetActive(false);
 	}
 }

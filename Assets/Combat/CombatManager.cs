@@ -34,14 +34,6 @@ public class CombatManager : MonoBehaviour
 	private void Start()
 	{
 		encounterIndex = -1;
-
-		// Subscribe to player death
-		if (Player != null)
-		{
-			Player.OnDeath += EntityDied;
-		}
-
-		UIManager.Instance.OnTextFinished += ProcessEntityTurn;
 	}
 
 	#region Encounter Management
@@ -74,13 +66,16 @@ public class CombatManager : MonoBehaviour
 
 	public void StartPlayerTurn()
 	{
-		isPlayerPhase = true;
 		Debug.Log("Player turn start");
+
+		isPlayerPhase = true;
 		UIManager.Instance.DisplayPlayerOptions(true);
 	}
 
 	public void EndPlayerTurn()
 	{
+		Debug.Log("Player turn end");
+
 		isPlayerPhase = false;
 		enemiesProcessed = 0;
 		ProcessEntityTurn();
@@ -90,6 +85,24 @@ public class CombatManager : MonoBehaviour
 	{
 		if (isPlayerPhase)
 			return;
+
+		// Check if all enemies are dead
+		bool isEncounterDefeated = true;
+		foreach (Enemy i in currentEncounter.Enemies)
+		{
+			if (!i.IsDead)
+			{
+				isEncounterDefeated = false;
+				break;
+			}
+		}
+
+		if (isEncounterDefeated)
+		{
+			FinishEncounter();
+			return;
+		}
+
 
 		// If all enemies acted, return to player phase
 		if (enemiesProcessed >= currentEncounter.Enemies.Length)
@@ -107,28 +120,38 @@ public class CombatManager : MonoBehaviour
 			return;
 		}
 
+		// Attack player
 		int rand = UnityEngine.Random.Range(0, enemy.BaseAttacks.Length);
 		AttackEntity(enemy, Player, enemy.BaseAttacks[rand]);
 	}
 
 	private IEnumerator PlayAttackAnim(Entity instigator, Entity victim, SO_Attack attackData)
 	{
+		UIManager.Instance.AddStringToTextQueue($"{instigator.name} used {attackData.AttackName} on {victim.name}!");
+		UIManager.Instance.AddStringToTextQueue($"It dealt {attackData.Damage} damage!");
+
+		UIManager.Instance.PlayTextQueue();
+
 		// VFX
-		yield return new WaitForSeconds(0.5f);
+		yield return new WaitForSeconds(attackData.AttackDuration);
 
-		// Print text
-		string text = $"{instigator.name} used {attackData.AttackName} on {victim.name}!";
+		// Deal damage
+		victim.RemoveHealth(attackData.Damage, out bool isDead);
+		if (isDead)
+		{
+			UIManager.Instance.AddStringToTextQueue($"{victim.name} was slain!");
+			UIManager.Instance.PlayTextQueue();
+		}
 
-		if (attackData.Damage > 0)
-			text += $" It dealt {attackData.Damage} damage!";
 
-		OnAttackPerformed?.Invoke(text);
-
-		// Apply damage
+		// Apply damage to victim
 
 
 		// Wait for text to finish (UIManager handles it)
-		yield return new WaitUntil(() => UIManager.Instance.IsTextPrinting);
+		yield return new WaitUntil(() => !UIManager.Instance.IsPrintingTextQueue);
+
+		// Delay
+		yield return new WaitForSeconds(.5f);
 
 		if (!isPlayerPhase)
 		{
@@ -139,6 +162,7 @@ public class CombatManager : MonoBehaviour
 		{
 			EndPlayerTurn();
 		}
+
 	}
 
 	#endregion
@@ -147,11 +171,15 @@ public class CombatManager : MonoBehaviour
 
 	public void AttackEntity(Entity instigator, Entity victim, SO_Attack attackData)
 	{
+		UIManager.Instance.HideTextPanel();
+
+		// Start attack anim
 		StartCoroutine(PlayAttackAnim(instigator, victim, attackData));
 	}
 
 	#endregion
 
+	/*
 	public void EntityDied(Entity entity)
 	{
 		if(entity == null)
@@ -179,4 +207,5 @@ public class CombatManager : MonoBehaviour
 		}
 
 	}
+	*/
 }
