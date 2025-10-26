@@ -287,14 +287,6 @@ public class UIManager : MonoBehaviour
     {
 		CombatManager combatManager = CombatManager.Instance;
 
-		// Remove this once proper enemy highlights are implemented!!!
-		foreach (Enemy i in m_currentEnemies)
-		{
-			if (i.IsDead)
-				m_highlightedEnemy++;
-		}
-
-		// Perform attack on enemy
 		combatManager.AttackEntity(combatManager.Player, m_currentEnemies[m_highlightedEnemy], attackData);
 
 		DisplayPlayerOptions(false); // TO-DO: this can probably be removed
