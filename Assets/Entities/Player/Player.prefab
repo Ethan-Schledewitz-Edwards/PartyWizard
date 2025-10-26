@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5756282674162274725}
   - component: {fileID: 3244530091896292626}
   - component: {fileID: 8849991043581046193}
+  - component: {fileID: 4622046825949163037}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -92,6 +93,28 @@ AudioListener:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4724016174342438139}
   m_Enabled: 1
+--- !u!95 &4622046825949163037
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4724016174342438139}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 19c5559e3ec9916489c33282fc1d9e3a, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &5467183630149920940
 GameObject:
   m_ObjectHideFlags: 0
@@ -139,7 +162,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03e07a80cfc36ce42ada4557fb083a17, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Player
-  IsDead: 0
+  <BaseAttacks>k__BackingField:
+  - {fileID: 11400000, guid: aab800135ee003f40a79b1c5a50601c3, type: 2}
   m_playerSpellPool:
   - {fileID: 11400000, guid: 2c9d1d60dac8bc042903aa20f0643ec3, type: 2}
   - {fileID: 11400000, guid: 2795bf68605b3fb46bf91657d695752e, type: 2}
@@ -149,7 +173,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 88fe2a3cd5249124daf1981206b6fd9c, type: 2}
   - {fileID: 11400000, guid: 2130181904dc55d4ca26f533ca3a0a66, type: 2}
   m_railNetwork: {fileID: 0}
-  CurrentSpell: {fileID: 11400000, guid: aab800135ee003f40a79b1c5a50601c3, type: 2}
 --- !u!54 &405875074165169085
 Rigidbody:
   m_ObjectHideFlags: 0
