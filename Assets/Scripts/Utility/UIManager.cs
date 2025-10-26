@@ -43,14 +43,19 @@ public class UIManager : MonoBehaviour
 
 	private void Start()
 	{
+		CombatManager combatManager = CombatManager.Instance;
+
 		m_canvas.SetActive(false);
 		m_playerOptions.SetActive(false);
 		m_basePanel.SetActive(true);
 		m_itemPanel.SetActive(false);
 		m_textPanel.SetActive(false);
 
-		CombatManager.Instance.OnEncounterBegin += BeginEncounter;
-		CombatManager.Instance.OnEncounterEnd += EndEncounter;
+		m_healthSlider.maxValue = combatManager.Player.MaxHealth;
+		m_adrenalineSlider.maxValue = combatManager.Player.MaxAdrenaline;
+
+		combatManager.OnEncounterBegin += BeginEncounter;
+		combatManager.OnEncounterEnd += EndEncounter;
 	}
 	#endregion
 
@@ -161,8 +166,8 @@ public class UIManager : MonoBehaviour
 		m_spellButton.SetSpell(player.CurrentSpell);
 
 		// Refresh health and adrenaline bars
-		m_healthSlider.value = player.MaxHealth/ player.Health;
-		m_adrenalineSlider.value = player.MaxAdrenaline/ player.Adrenaline;
+		m_healthSlider.value = player.Health;
+		m_adrenalineSlider.value = player.Adrenaline;
 	}
 
 	#region Player Options
