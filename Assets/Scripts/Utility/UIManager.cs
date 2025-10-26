@@ -246,13 +246,13 @@ public class UIManager : MonoBehaviour
         if (input > 0f)
         {
             m_highlightedEnemy++;
-            if (m_highlightedEnemy > CombatManager.Instance.currentEncounter.Enemies.Length)
+            if (m_highlightedEnemy > CombatManager.Instance.currentEncounter.Enemies.Length - 1)
                 m_highlightedEnemy = 0;
 			
             while (m_currentEnemies[m_highlightedEnemy].IsDead)
             {
                 m_highlightedEnemy++; 
-				if (m_highlightedEnemy > CombatManager.Instance.currentEncounter.Enemies.Length)
+				if (m_highlightedEnemy > CombatManager.Instance.currentEncounter.Enemies.Length - 1)
                     m_highlightedEnemy = 0;
             }
 
