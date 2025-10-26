@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<< HEAD:Assets/Props/Kitchen Cabinet.blend.meta
 guid: 900a1ccb969246742939c3bfb7c33397
+=======
+guid: ba05dc770d9f843428cb2e0946a7d6ef
+>>>>>>> origin/UICombat:Assets/Models/Kitchen Cabinet.blend.meta
 ModelImporter:
   serializedVersion: 24200
   internalIDToNameTable: []
@@ -33,7 +37,11 @@ ModelImporter:
     isReadable: 0
   meshes:
     lODScreenPercentages: []
+<<<<<<< HEAD:Assets/Props/Kitchen Cabinet.blend.meta
     globalScale: 0.5
+=======
+    globalScale: 1
+>>>>>>> origin/UICombat:Assets/Models/Kitchen Cabinet.blend.meta
     meshCompression: 0
     addColliders: 0
     useSRGBMaterialColor: 1
@@ -41,8 +49,13 @@ ModelImporter:
     importPhysicalCameras: 1
     importVisibility: 1
     importBlendShapes: 1
+<<<<<<< HEAD:Assets/Props/Kitchen Cabinet.blend.meta
     importCameras: 0
     importLights: 0
+=======
+    importCameras: 1
+    importLights: 1
+>>>>>>> origin/UICombat:Assets/Models/Kitchen Cabinet.blend.meta
     nodeNameCollisionStrategy: 1
     fileIdsGeneration: 2
     swapUVChannels: 0
@@ -91,7 +104,11 @@ ModelImporter:
     armStretch: 0.05
     legStretch: 0.05
     feetSpacing: 0
+<<<<<<< HEAD:Assets/Props/Kitchen Cabinet.blend.meta
     globalScale: 0.5
+=======
+    globalScale: 1
+>>>>>>> origin/UICombat:Assets/Models/Kitchen Cabinet.blend.meta
     rootMotionBoneName: 
     hasTranslationDoF: 0
     hasExtraRoot: 0

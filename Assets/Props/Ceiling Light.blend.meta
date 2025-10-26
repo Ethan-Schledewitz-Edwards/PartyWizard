@@ -1,9 +1,5 @@
 fileFormatVersion: 2
-<<<<<<< HEAD:Assets/Props/Sink.blend.meta
-guid: a983e4c2337c9b54f825e8638880bd8e
-=======
-guid: c99683a8ede03cd4581531fc9c8aaf06
->>>>>>> origin/UICombat:Assets/Models/Sink.blend.meta
+guid: 165989767cfed0e489d42c8402a93df4
 ModelImporter:
   serializedVersion: 24200
   internalIDToNameTable: []
@@ -37,11 +33,7 @@ ModelImporter:
     isReadable: 0
   meshes:
     lODScreenPercentages: []
-<<<<<<< HEAD:Assets/Props/Sink.blend.meta
-    globalScale: 0.5
-=======
     globalScale: 1
->>>>>>> origin/UICombat:Assets/Models/Sink.blend.meta
     meshCompression: 0
     addColliders: 0
     useSRGBMaterialColor: 1
@@ -49,13 +41,8 @@ ModelImporter:
     importPhysicalCameras: 1
     importVisibility: 1
     importBlendShapes: 1
-<<<<<<< HEAD:Assets/Props/Sink.blend.meta
-    importCameras: 0
-    importLights: 0
-=======
     importCameras: 1
     importLights: 1
->>>>>>> origin/UICombat:Assets/Models/Sink.blend.meta
     nodeNameCollisionStrategy: 1
     fileIdsGeneration: 2
     swapUVChannels: 0
@@ -104,11 +91,7 @@ ModelImporter:
     armStretch: 0.05
     legStretch: 0.05
     feetSpacing: 0
-<<<<<<< HEAD:Assets/Props/Sink.blend.meta
-    globalScale: 0.5
-=======
     globalScale: 1
->>>>>>> origin/UICombat:Assets/Models/Sink.blend.meta
     rootMotionBoneName: 
     hasTranslationDoF: 0
     hasExtraRoot: 0

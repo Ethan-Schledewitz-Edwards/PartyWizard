@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<< HEAD:Assets/Props/Kitchen Drawers.blend.meta
 guid: 3fe984e53f199e143bfa346b03e5610c
+=======
+guid: 5eee0536cf852d54c8029a15147df0f8
+>>>>>>> origin/UICombat:Assets/Models/Kitchen Drawers.blend.meta
 ModelImporter:
   serializedVersion: 24200
   internalIDToNameTable: []
@@ -33,7 +37,11 @@ ModelImporter:
     isReadable: 0
   meshes:
     lODScreenPercentages: []
+<<<<<<< HEAD:Assets/Props/Kitchen Drawers.blend.meta
     globalScale: 0.5
+=======
+    globalScale: 1
+>>>>>>> origin/UICombat:Assets/Models/Kitchen Drawers.blend.meta
     meshCompression: 0
     addColliders: 0
     useSRGBMaterialColor: 1
@@ -41,8 +49,13 @@ ModelImporter:
     importPhysicalCameras: 1
     importVisibility: 1
     importBlendShapes: 1
+<<<<<<< HEAD:Assets/Props/Kitchen Drawers.blend.meta
     importCameras: 0
     importLights: 0
+=======
+    importCameras: 1
+    importLights: 1
+>>>>>>> origin/UICombat:Assets/Models/Kitchen Drawers.blend.meta
     nodeNameCollisionStrategy: 1
     fileIdsGeneration: 2
     swapUVChannels: 0
@@ -91,7 +104,11 @@ ModelImporter:
     armStretch: 0.05
     legStretch: 0.05
     feetSpacing: 0
+<<<<<<< HEAD:Assets/Props/Kitchen Drawers.blend.meta
     globalScale: 0.5
+=======
+    globalScale: 1
+>>>>>>> origin/UICombat:Assets/Models/Kitchen Drawers.blend.meta
     rootMotionBoneName: 
     hasTranslationDoF: 0
     hasExtraRoot: 0
