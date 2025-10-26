@@ -15,6 +15,6 @@ MonoBehaviour:
   <AttackName>k__BackingField: Punch
   <Damage>k__BackingField: 2
   <AdrenalineCost>k__BackingField: 0
-  <AttackDuration>k__BackingField: 0.2
+  <AttackDuration>k__BackingField: 0.5
   <SoundEffect>k__BackingField: {fileID: 0}
   <ParticleSystem>k__BackingField: {fileID: 0}
