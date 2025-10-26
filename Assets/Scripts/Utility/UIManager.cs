@@ -189,9 +189,9 @@ public class UIManager : MonoBehaviour
 		combatManager.EntityGuard(player);
 	}
 
-    public void ItemButton()
+    public void AdrenalineButton()
     {
-		ResetPlayerOptions();
+		// Pull up revolver
 	}
 
     #endregion
