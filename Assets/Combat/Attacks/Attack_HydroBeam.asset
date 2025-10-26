@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Attack_HydroBeam
   m_EditorClassIdentifier: Assembly-CSharp::SO_Attack
   <AttackName>k__BackingField: Hydro Beam
-  <Damage>k__BackingField: 10
+  <Damage>k__BackingField: 15
   <AdrenalineCost>k__BackingField: 10
   <AttackDuration>k__BackingField: 1
   <SoundEffect>k__BackingField: {fileID: 8300000, guid: 1df5017d015a4154cb01cd344e1039ad, type: 3}
