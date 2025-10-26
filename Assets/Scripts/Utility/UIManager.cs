@@ -17,6 +17,7 @@ public class UIManager : MonoBehaviour
 	[SerializeField] private Slider m_healthSlider;
 	[SerializeField] private Slider m_adrenalineSlider;
 	[SerializeField] private SpinningWheel m_spinningwheel;
+	[SerializeField] private GameObject m_rollScreen;
 
 	[SerializeField] private EnemySelector m_enemySelector;
 	[SerializeField] private EnemySelector m_particleEffects;
@@ -46,6 +47,8 @@ public class UIManager : MonoBehaviour
     private Queue<string> m_stringsToType;
 	private Enemy[] m_currentEnemies;
 	private int m_highlightedEnemy;
+
+	private bool isPickingSPELL;
 
 	public bool IsPrintingTextQueue { get; private set; }
 
@@ -106,6 +109,8 @@ public class UIManager : MonoBehaviour
 		m_canvas.SetActive(false);
 		DisplayPlayerOptions(false);
 		HideTextPanel();
+
+		ShowRollScreen();
 	}
 
 	#endregion
@@ -234,11 +239,21 @@ public class UIManager : MonoBehaviour
 
 	private void RechargeAdrenaline()
 	{
-		// Hide UI
-		DisplayPlayerOptions(false);
-		m_spinningwheel.gameObject.SetActive(false);
+		if (isPickingSPELL)
+		{
+			DisplayPlayerOptions(false);
+			m_spinningwheel.gameObject.SetActive(false);
+			m_rollScreen.SetActive(false);
+			isPickingSPELL = false;
+		}
+		else
+		{
+			// Hide UI
+			DisplayPlayerOptions(false);
+			m_spinningwheel.gameObject.SetActive(false);
 
-		CombatManager.Instance.RechargeAdrenaline();
+			CombatManager.Instance.RechargeAdrenaline();
+		}
 	}
 
 	#endregion
@@ -318,6 +333,24 @@ public class UIManager : MonoBehaviour
         DisplayPlayerOptions(true);
     }
     #endregion
+
+	public void ShowRollScreen()
+	{
+		m_rollScreen.SetActive(true);
+	}
+
+	public void YuhButton()
+	{
+		m_rollScreen.SetActive(false);
+		StartCoroutine(WaitAndSpinWheel());
+	}
+
+	public void NahButton()
+	{
+		m_rollScreen.SetActive(false);
+
+		// Move player
+	}
 
 	public void GameOver()
 	{

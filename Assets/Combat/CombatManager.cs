@@ -56,6 +56,8 @@ public class CombatManager : MonoBehaviour
 	{
 		OnEncounterEnd?.Invoke(currentEncounter);
 		currentEncounter = null;
+
+		Player.AssignRandomSpell();
 	}
 
 	public void AdvanceEncouner()
