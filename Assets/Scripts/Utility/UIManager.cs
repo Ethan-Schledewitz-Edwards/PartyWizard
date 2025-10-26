@@ -27,6 +27,18 @@ public class UIManager : MonoBehaviour
 	[SerializeField] private GameObject m_textPanel;
 	[SerializeField] private TextMeshProUGUI m_textBox;
 
+	[Header("GameStates")]
+	[SerializeField] private GameObject m_whiteLightPanel;
+	[SerializeField] private GameObject m_gameOverPanel;
+	[SerializeField] private GameObject m_playerWonPanel;
+
+	[Header("Audio")]
+	[SerializeField] private AudioSource m_audioSource;
+	[SerializeField] private AudioSource m_musicSource;// Bad
+	[SerializeField] private AudioClip m_ringing;
+	[SerializeField] private AudioClip m_death;
+	[SerializeField] private AudioClip m_won;
+
 	[HideInInspector] public SO_Attack m_selectedAttack;
 	private InputSystem_Actions m_inputActions;
 
@@ -213,7 +225,11 @@ public class UIManager : MonoBehaviour
 
 	private void FireBullet()
 	{
-		Debug.Log("YOU DIED");
+		m_whiteLightPanel.SetActive(true);
+
+		// Play tinitus ringing sound
+		m_audioSource.PlayOneShot(m_ringing);
+		m_musicSource.Stop();
 	}
 
 	private void RechargeAdrenaline()
@@ -302,7 +318,22 @@ public class UIManager : MonoBehaviour
         DisplayPlayerOptions(true);
     }
     #endregion
-    public void UseAttack(SO_Attack attackData)
+
+	public void GameOver()
+	{
+		m_gameOverPanel.SetActive(true);
+		m_audioSource.PlayOneShot(m_death);
+		m_musicSource.Stop();
+	}
+
+	public void Won()
+	{
+		m_playerWonPanel.SetActive(true);
+		m_audioSource.PlayOneShot(m_won);
+		m_musicSource.Stop();
+	}
+
+	public void UseAttack(SO_Attack attackData)
     {
 		CombatManager combatManager = CombatManager.Instance;
 
