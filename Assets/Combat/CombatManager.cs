@@ -147,6 +147,10 @@ public class CombatManager : MonoBehaviour
 			}
 		}
 
+		// Notify adrenaline drain
+		if(instigator is Player player && attackData.AdrenalineCost > 0)
+			UIManager.Instance.AddStringToTextQueue($"{instigator.name} consumed {attackData.AdrenalineCost} adrenaline.");
+
 		UIManager.Instance.PlayTextQueue();
 
 		// VFX
