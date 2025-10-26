@@ -21,6 +21,7 @@ public class UIManager : MonoBehaviour
 	[SerializeField] private EnemySelector m_enemySelector;
 	[SerializeField] private EnemySelector m_particleEffects;
 	[SerializeField] private ParticleSystem m_particleSystem;
+	[SerializeField] private AudioSource m_sfxSource;
 
 	[Header("Text Box")]
 	[SerializeField] private GameObject m_textPanel;
@@ -311,6 +312,8 @@ public class UIManager : MonoBehaviour
 		m_particleEffects.SelectEnemy(m_currentEnemies[m_highlightedEnemy].gameObject.transform);
 		m_particleSystem.Play();
 
-		DisplayPlayerOptions(false); // TO-DO: this can probably be removed
+		m_sfxSource.clip = attackData.SoundEffect;
+        m_sfxSource.Play();
+        DisplayPlayerOptions(false); // TO-DO: this can probably be removed
 	}
 }

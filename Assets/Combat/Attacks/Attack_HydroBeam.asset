@@ -16,5 +16,5 @@ MonoBehaviour:
   <Damage>k__BackingField: 10
   <AdrenalineCost>k__BackingField: 10
   <AttackDuration>k__BackingField: 1
-  <SoundEffect>k__BackingField: {fileID: 0}
+  <SoundEffect>k__BackingField: {fileID: 8300000, guid: 1df5017d015a4154cb01cd344e1039ad, type: 3}
   <ParticleSystem>k__BackingField: {fileID: 0}
