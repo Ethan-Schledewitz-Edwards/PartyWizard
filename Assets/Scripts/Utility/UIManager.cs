@@ -246,6 +246,9 @@ public class UIManager : MonoBehaviour
         if (input > 0f)
         {
             m_highlightedEnemy++;
+            if (m_highlightedEnemy > CombatManager.Instance.currentEncounter.Enemies.Length)
+                m_highlightedEnemy = 0;
+			
             while (m_currentEnemies[m_highlightedEnemy].IsDead)
             {
                 m_highlightedEnemy++; 
@@ -260,6 +263,9 @@ public class UIManager : MonoBehaviour
         if (input < 0f)
         {
             m_highlightedEnemy--;
+            if (m_highlightedEnemy < 0)
+                m_highlightedEnemy = CombatManager.Instance.currentEncounter.Enemies.Length - 1;
+
             while (m_currentEnemies[m_highlightedEnemy].IsDead)
             {
                 m_highlightedEnemy--;
