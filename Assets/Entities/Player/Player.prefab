@@ -173,6 +173,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 88fe2a3cd5249124daf1981206b6fd9c, type: 2}
   - {fileID: 11400000, guid: 2130181904dc55d4ca26f533ca3a0a66, type: 2}
   m_railNetwork: {fileID: 0}
+  m_animator: {fileID: 4622046825949163037}
 --- !u!54 &405875074165169085
 Rigidbody:
   m_ObjectHideFlags: 0

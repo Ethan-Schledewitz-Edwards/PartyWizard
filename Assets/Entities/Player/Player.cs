@@ -22,6 +22,7 @@ public class Player : Entity
 	private Spline m_currentSpline;
 
 	private Rigidbody m_rb;
+	[SerializeField] private Animator m_animator;
 
 	// System
 	public int Adrenaline { get; private set; }
@@ -56,9 +57,15 @@ public class Player : Entity
 	}
 	#endregion
 
+	public override void RemoveHealth(int value, out bool isDead)
+	{
+		base.RemoveHealth(value, out isDead);
+		m_animator.SetTrigger("OnHit");
+	}
+
 	public override void Die()
 	{
-		Debug.Log("Player is dead");
+		m_animator.SetTrigger("OnDeath");
 	}
 
 	#region Magic

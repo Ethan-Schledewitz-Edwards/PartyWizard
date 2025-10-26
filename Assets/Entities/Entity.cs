@@ -33,7 +33,7 @@ public abstract class Entity : MonoBehaviour
 
 	public abstract void Die();
 
-	public void RemoveHealth(int value, out bool isDead)
+	public virtual void RemoveHealth(int value, out bool isDead)
 	{
 		SetHealth(Health - value);
 		isDead = IsDead;
