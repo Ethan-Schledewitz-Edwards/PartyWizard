@@ -1530,13 +1530,13 @@ MonoBehaviour:
   m_particleSystem: {fileID: 0}
   m_textPanel: {fileID: 4699317766699209186}
   m_textBox: {fileID: 3910550515963352099}
-  m_whiteLightPanel: {fileID: 0}
-  m_gameOverPanel: {fileID: 0}
-  m_playerWonPanel: {fileID: 0}
+  m_whiteLightPanel: {fileID: 1743769456170923438}
+  m_gameOverPanel: {fileID: 2645628235541787260}
+  m_playerWonPanel: {fileID: 6119469021979992017}
   m_audioSource: {fileID: 7618736036953426377}
-  m_ringing: {fileID: 0}
-  m_death: {fileID: 0}
-  m_won: {fileID: 0}
+  m_ringing: {fileID: 8300000, guid: ad23655f4a9bb874a94b26ad698ce1db, type: 3}
+  m_death: {fileID: 8300000, guid: e8d448202115faf4fb0d3743923ac1eb, type: 3}
+  m_won: {fileID: 8300000, guid: e8d448202115faf4fb0d3743923ac1eb, type: 3}
   m_selectedAttack: {fileID: 0}
 --- !u!82 &7618736036953426377
 AudioSource:
