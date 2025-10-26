@@ -1726,12 +1726,24 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 50842613914891712, guid: 41ea325bc290ca64cbb294d2cc8c278d, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 50842613914891712, guid: 41ea325bc290ca64cbb294d2cc8c278d, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 50842613914891712, guid: 41ea325bc290ca64cbb294d2cc8c278d, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 50842613914891712, guid: 41ea325bc290ca64cbb294d2cc8c278d, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 50842613914891712, guid: 41ea325bc290ca64cbb294d2cc8c278d, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.85
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 50842613914891712, guid: 41ea325bc290ca64cbb294d2cc8c278d, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1767,11 +1779,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 864534697683267450, guid: 41ea325bc290ca64cbb294d2cc8c278d, type: 3}
       propertyPath: m_Name
-      value: highlight_circle
+      value: highlight_arrow
       objectReference: {fileID: 0}
     - target: {fileID: 864534697683267450, guid: 41ea325bc290ca64cbb294d2cc8c278d, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

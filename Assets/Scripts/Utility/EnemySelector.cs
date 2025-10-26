@@ -6,7 +6,7 @@ public class EnemySelector : MonoBehaviour
     {
         Vector3 target = enemy.position;
 
-        target.y = -1.72f; // position to be placed just above ground
+        target.y = 1f; // position to be placed just above the enemy
 
         transform.position = target;
     }

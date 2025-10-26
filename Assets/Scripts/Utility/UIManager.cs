@@ -24,8 +24,8 @@ public class UIManager : MonoBehaviour
 	[SerializeField] private GameObject m_textPanel;
 	[SerializeField] private TextMeshProUGUI m_textBox;
 
+	[HideInInspector] public SO_Attack m_selectedAttack;
 	private InputSystem_Actions m_inputActions;
-	public SO_Attack m_selectedAttack;
 
     // System
     private Queue<string> m_stringsToType;
