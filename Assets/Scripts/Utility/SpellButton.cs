@@ -26,6 +26,7 @@ public class SpellButton : MonoBehaviour
 
 	public void CastSpell()
 	{
-		UIManager.Instance.UseAttack(AttackData);
-	}
+        UIManager.Instance.m_selectedAttack = AttackData;
+        UIManager.Instance.SelectEnemy();
+    }
 }

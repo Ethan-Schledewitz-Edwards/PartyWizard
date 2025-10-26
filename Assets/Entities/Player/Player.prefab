@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5756282674162274725}
   - component: {fileID: 3244530091896292626}
   - component: {fileID: 8849991043581046193}
-  - component: {fileID: 6775565879858726375}
+  - component: {fileID: 4622046825949163037}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -93,7 +93,7 @@ AudioListener:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4724016174342438139}
   m_Enabled: 1
---- !u!95 &6775565879858726375
+--- !u!95 &4622046825949163037
 Animator:
   serializedVersion: 7
   m_ObjectHideFlags: 0
@@ -173,6 +173,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 88fe2a3cd5249124daf1981206b6fd9c, type: 2}
   - {fileID: 11400000, guid: 2130181904dc55d4ca26f533ca3a0a66, type: 2}
   m_railNetwork: {fileID: 0}
+  m_animator: {fileID: 4622046825949163037}
 --- !u!54 &405875074165169085
 Rigidbody:
   m_ObjectHideFlags: 0
