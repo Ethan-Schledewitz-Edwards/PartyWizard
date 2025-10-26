@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
 using System.Collections;
+using System;
 
 public class SpinningWheel : MonoBehaviour
 {
@@ -23,10 +24,10 @@ public class SpinningWheel : MonoBehaviour
     [SerializeField] private AnimationCurve spinCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
     
     [Header("Events")]
-    public UnityEvent OnSpinStart;
-    public UnityEvent OnSpinComplete;
-    public UnityEvent OnBulletHit; 
-    public UnityEvent OnSafe; 
+    public Action OnSpinStart;
+    public Action OnSpinComplete;
+    public Action OnBulletHit; 
+    public Action OnSafe; 
     
     private bool isSpinning = false;
     private float degreesPerSegment;
@@ -36,14 +37,9 @@ public class SpinningWheel : MonoBehaviour
     {
         degreesPerSegment = 360f / segments;
         
-        if (OnSpinStart == null) OnSpinStart = new UnityEvent();
-        if (OnSpinComplete == null) OnSpinComplete = new UnityEvent();
-        if (OnBulletHit == null) OnBulletHit = new UnityEvent();
-        if (OnSafe == null) OnSafe = new UnityEvent();
-        
         if (randomizeBulletEachSpin)
         {
-            currentBulletSegment = Random.Range(0, segments);
+            currentBulletSegment = UnityEngine.Random.Range(0, segments);
         }
         else
         {
@@ -59,7 +55,7 @@ public class SpinningWheel : MonoBehaviour
         {
             if (randomizeBulletEachSpin)
             {
-                currentBulletSegment = Random.Range(0, segments);
+                currentBulletSegment = UnityEngine.Random.Range(0, segments);
                 Debug.Log($"New bullet position: Segment {currentBulletSegment}");
             }
             
@@ -93,14 +89,14 @@ public class SpinningWheel : MonoBehaviour
         isSpinning = true;
         OnSpinStart?.Invoke();
         
-        int targetSegment = forcedSegment ?? Random.Range(0, segments);
+        int targetSegment = forcedSegment ?? UnityEngine.Random.Range(0, segments);
         
-        float duration = Random.Range(minSpinDuration, maxSpinDuration);
-        int revolutions = Random.Range(minRevolutions, maxRevolutions);
+        float duration = UnityEngine.Random.Range(minSpinDuration, maxSpinDuration);
+        int revolutions = UnityEngine.Random.Range(minRevolutions, maxRevolutions);
         
         float targetAngle = (revolutions * 360f) + (targetSegment * degreesPerSegment) + imageRotationOffset;
         
-        float randomOffset = Random.Range(-degreesPerSegment * 0.3f, degreesPerSegment * 0.3f);
+        float randomOffset = UnityEngine.Random.Range(-degreesPerSegment * 0.3f, degreesPerSegment * 0.3f);
         targetAngle += randomOffset;
         
         float startAngle = wheelTransform.eulerAngles.z;

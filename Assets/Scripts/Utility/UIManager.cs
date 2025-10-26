@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
@@ -13,10 +12,10 @@ public class UIManager : MonoBehaviour
 	[SerializeField] private GameObject m_canvas;
 	[SerializeField] private GameObject m_playerOptions;
     [SerializeField] private GameObject m_basePanel;
-    [SerializeField] private GameObject m_itemPanel;
 	[SerializeField] private SpellButton m_spellButton;
 	[SerializeField] private Slider m_healthSlider;
 	[SerializeField] private Slider m_adrenalineSlider;
+	[SerializeField] private SpinningWheel m_spinningwheel;
 
 	[Header("Text Box")]
 	[SerializeField] private GameObject m_textPanel;
@@ -48,28 +47,19 @@ public class UIManager : MonoBehaviour
 		m_canvas.SetActive(false);
 		m_playerOptions.SetActive(false);
 		m_basePanel.SetActive(true);
-		m_itemPanel.SetActive(false);
 		m_textPanel.SetActive(false);
+		m_spinningwheel.gameObject.SetActive(false);
 
 		m_healthSlider.maxValue = combatManager.Player.MaxHealth;
 		m_adrenalineSlider.maxValue = combatManager.Player.MaxAdrenaline;
 
 		combatManager.OnEncounterBegin += BeginEncounter;
 		combatManager.OnEncounterEnd += EndEncounter;
+
+		m_spinningwheel.OnBulletHit += FireBullet;
+		m_spinningwheel.OnSafe += RechargeAdrenaline;
 	}
 	#endregion
-
-	private void Update()
-    {
-        if (Keyboard.current.escapeKey.wasPressedThisFrame)
-        {
-            if (!m_basePanel.activeInHierarchy)
-            {
-				m_basePanel.SetActive(true);
-				m_itemPanel.SetActive(false);
-            }
-        }
-    }
 
 	#region Combat State
 
@@ -120,7 +110,7 @@ public class UIManager : MonoBehaviour
 			string nextText = m_stringsToType.Dequeue();
 			yield return StartCoroutine(TypeText(nextText));
 
-			// optional pause between messages
+			// pause between messages
 			yield return new WaitForSeconds(0.5f);
 		}
 
@@ -159,7 +149,7 @@ public class UIManager : MonoBehaviour
 	private void ResetPlayerOptions()
 	{
 		m_basePanel.SetActive(true);
-		m_itemPanel.SetActive(false);
+		m_spinningwheel.gameObject.SetActive(false);
 
 		// Refresh current spell
 		Player player = CombatManager.Instance.Player;
@@ -170,7 +160,7 @@ public class UIManager : MonoBehaviour
 		m_adrenalineSlider.value = player.Adrenaline;
 	}
 
-	#region Player Options
+	#region Buttons
 
 	public void AttackButton()
     {
@@ -189,14 +179,38 @@ public class UIManager : MonoBehaviour
 		combatManager.EntityGuard(player);
 	}
 
-    public void AdrenalineButton()
-    {
-		// Pull up revolver
+	public void AdrenalineButton()
+	{
+		DisplayPlayerOptions(false);
+		StartCoroutine(WaitAndSpinWheel());
 	}
 
-    #endregion
-    
-    public void UseAttack(SO_Attack attackData)
+	private IEnumerator WaitAndSpinWheel()
+	{
+		m_spinningwheel.gameObject.SetActive(true);
+
+		yield return new WaitForSeconds(0.3f);
+
+		m_spinningwheel.Spin();
+	}
+
+	private void FireBullet()
+	{
+		Debug.Log("YOU DIED");
+	}
+
+	private void RechargeAdrenaline()
+	{
+		// Hide UI
+		DisplayPlayerOptions(false);
+		m_spinningwheel.gameObject.SetActive(false);
+
+		CombatManager.Instance.RechargeAdrenaline();
+	}
+
+	#endregion
+
+	public void UseAttack(SO_Attack attackData)
     {
 		CombatManager combatManager = CombatManager.Instance;
 
@@ -211,10 +225,5 @@ public class UIManager : MonoBehaviour
 		combatManager.AttackEntity(combatManager.Player, m_currentEnemies[m_highlightedEnemy], attackData);
 
 		DisplayPlayerOptions(false);
-	}
-
-    public void BackButton()
-    {
-		ResetPlayerOptions();
 	}
 }

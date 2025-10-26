@@ -20,8 +20,10 @@ public class CombatManager : MonoBehaviour
 	public Action<Encounter> OnEncounterEnd;
 
 	private bool isPlayerPhase;
-	private bool isPlayingAttackAnimation;
 	private int enemiesProcessed;// Used for enemy attack phase
+
+
+	#region Initialization Methods
 
 	private void Awake()
 	{
@@ -35,6 +37,8 @@ public class CombatManager : MonoBehaviour
 	{
 		encounterIndex = -1;
 	}
+
+	#endregion
 
 	#region Encounter Management
 
@@ -207,6 +211,14 @@ public class CombatManager : MonoBehaviour
 			EndPlayerTurn();
 		}
 
+	}
+
+	public void RechargeAdrenaline()
+	{
+		UIManager.Instance.AddStringToTextQueue($"You missed the bullet... your adrenaline has been restored.");
+		Player.SetAdrenaline(Player.MaxAdrenaline);
+
+		EndPlayerTurn();
 	}
 
 	#endregion
