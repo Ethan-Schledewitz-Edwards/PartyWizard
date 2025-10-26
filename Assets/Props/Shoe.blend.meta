@@ -1,9 +1,5 @@
 fileFormatVersion: 2
-<<<<<<< HEAD:Assets/Props/Shoe.blend.meta
 guid: 0b7b3594855551442a82278b3ffdee59
-=======
-guid: 3d6f9bdc2b615044c89145643d3e03db
->>>>>>> origin/UICombat:Assets/Models/Shoe.blend.meta
 ModelImporter:
   serializedVersion: 24200
   internalIDToNameTable: []
@@ -37,11 +33,7 @@ ModelImporter:
     isReadable: 0
   meshes:
     lODScreenPercentages: []
-<<<<<<< HEAD:Assets/Props/Shoe.blend.meta
     globalScale: 0.5
-=======
-    globalScale: 1
->>>>>>> origin/UICombat:Assets/Models/Shoe.blend.meta
     meshCompression: 0
     addColliders: 0
     useSRGBMaterialColor: 1
@@ -49,13 +41,8 @@ ModelImporter:
     importPhysicalCameras: 1
     importVisibility: 1
     importBlendShapes: 1
-<<<<<<< HEAD:Assets/Props/Shoe.blend.meta
     importCameras: 0
     importLights: 0
-=======
-    importCameras: 1
-    importLights: 1
->>>>>>> origin/UICombat:Assets/Models/Shoe.blend.meta
     nodeNameCollisionStrategy: 1
     fileIdsGeneration: 2
     swapUVChannels: 0
@@ -104,11 +91,7 @@ ModelImporter:
     armStretch: 0.05
     legStretch: 0.05
     feetSpacing: 0
-<<<<<<< HEAD:Assets/Props/Shoe.blend.meta
     globalScale: 0.5
-=======
-    globalScale: 1
->>>>>>> origin/UICombat:Assets/Models/Shoe.blend.meta
     rootMotionBoneName: 
     hasTranslationDoF: 0
     hasExtraRoot: 0

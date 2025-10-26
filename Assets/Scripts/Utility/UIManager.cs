@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
@@ -18,19 +17,12 @@ public class UIManager : MonoBehaviour
 	[SerializeField] private Slider m_adrenalineSlider;
 	[SerializeField] private SpinningWheel m_spinningwheel;
 
-	[SerializeField] private EnemySelector m_enemySelector;
-	[SerializeField] private EnemySelector m_particleEffects;
-	[SerializeField] private ParticleSystem m_particleSystem;
-
 	[Header("Text Box")]
 	[SerializeField] private GameObject m_textPanel;
 	[SerializeField] private TextMeshProUGUI m_textBox;
 
-	[HideInInspector] public SO_Attack m_selectedAttack;
-	private InputSystem_Actions m_inputActions;
-
-    // System
-    private Queue<string> m_stringsToType;
+	// System
+	private Queue<string> m_stringsToType;
 	private Enemy[] m_currentEnemies;
 	private int m_highlightedEnemy;
 
@@ -66,15 +58,7 @@ public class UIManager : MonoBehaviour
 
 		m_spinningwheel.OnBulletHit += FireBullet;
 		m_spinningwheel.OnSafe += RechargeAdrenaline;
-
-		m_inputActions = new InputSystem_Actions();
-
-		m_enemySelector.gameObject.SetActive(false);
-		m_inputActions.UI.Disable();
-        m_inputActions.UI.Navigate.performed += SelectEnemy;
-        m_inputActions.UI.Submit.performed += AttackEnemy;
-        m_inputActions.UI.Cancel.performed += CancelEnemySelection;
-    }
+	}
 	#endregion
 
 	#region Combat State
@@ -183,8 +167,8 @@ public class UIManager : MonoBehaviour
 		CombatManager combatManager = CombatManager.Instance;
 		Player player = combatManager.Player;
 
-		m_selectedAttack = player.BaseAttacks[0];
-		SelectEnemy();
+		// The player should only ever have punch by default
+		UseAttack(player.BaseAttacks[0]);
     }
 
 	public void GuardButton()
@@ -226,91 +210,20 @@ public class UIManager : MonoBehaviour
 
 	#endregion
 
-	#region Enemy Selection
-
-	private float m_selectionTime; // TO-DO: very bad solution, need a better way to offset whether selection is performed while within enemy selection
-    public void SelectEnemy()
-    {
-		m_selectionTime = Time.realtimeSinceStartup;
-
-        DisplayPlayerOptions(false);
-        m_enemySelector.gameObject.SetActive(true);
-        m_highlightedEnemy = 0;
-        m_enemySelector.SelectEnemy(CombatManager.Instance.currentEncounter.Enemies[m_highlightedEnemy].gameObject.transform);
-
-		m_inputActions.UI.Enable();
-    }
-
-    private void SelectEnemy(InputAction.CallbackContext ctx)
-    {
-		float input = ctx.ReadValue<Vector2>().x;
-
-        if (input > 0f)
-        {
-            m_highlightedEnemy++;
-            if (m_highlightedEnemy > CombatManager.Instance.currentEncounter.Enemies.Length - 1)
-                m_highlightedEnemy = 0;
-			
-            while (m_currentEnemies[m_highlightedEnemy].IsDead)
-            {
-                m_highlightedEnemy++; 
-				if (m_highlightedEnemy > CombatManager.Instance.currentEncounter.Enemies.Length - 1)
-                    m_highlightedEnemy = 0;
-            }
-
-            m_enemySelector.SelectEnemy(CombatManager.Instance.currentEncounter.Enemies[m_highlightedEnemy].gameObject.transform);
-
-        }
-
-        if (input < 0f)
-        {
-            m_highlightedEnemy--;
-            if (m_highlightedEnemy < 0)
-                m_highlightedEnemy = CombatManager.Instance.currentEncounter.Enemies.Length - 1;
-
-            while (m_currentEnemies[m_highlightedEnemy].IsDead)
-            {
-                m_highlightedEnemy--;
-                if (m_highlightedEnemy < 0)
-					m_highlightedEnemy = CombatManager.Instance.currentEncounter.Enemies.Length - 1;
-            }
-            
-            m_enemySelector.SelectEnemy(CombatManager.Instance.currentEncounter.Enemies[m_highlightedEnemy].gameObject.transform);
-
-        }
-    }
-
-    private void AttackEnemy(InputAction.CallbackContext ctx)
-    {
-		bool performAction = ctx.time > m_selectionTime + 0.1f; // TO-DO: same as sln above, needs fix
-
-		if (performAction)
-		{
-			m_enemySelector.gameObject.SetActive(false);
-			m_inputActions.UI.Disable();
-
-			UseAttack(m_selectedAttack);
-		}
-    }
-
-    private void CancelEnemySelection(InputAction.CallbackContext ctx)
-    {
-        m_enemySelector.gameObject.SetActive(false);
-        m_inputActions.UI.Disable();
-
-        DisplayPlayerOptions(true);
-    }
-    #endregion
-    public void UseAttack(SO_Attack attackData)
+	public void UseAttack(SO_Attack attackData)
     {
 		CombatManager combatManager = CombatManager.Instance;
+
+		// Remove this once proper enemy highlights are implemented!!!
+		foreach (Enemy i in m_currentEnemies)
+		{
+			if (i.IsDead)
+				m_highlightedEnemy++;
+		}
 
 		// Perform attack on enemy
 		combatManager.AttackEntity(combatManager.Player, m_currentEnemies[m_highlightedEnemy], attackData);
 
-		m_particleEffects.SelectEnemy(m_currentEnemies[m_highlightedEnemy].gameObject.transform);
-		m_particleSystem.Play();
-
-		DisplayPlayerOptions(false); // TO-DO: this can probably be removed
+		DisplayPlayerOptions(false);
 	}
 }
