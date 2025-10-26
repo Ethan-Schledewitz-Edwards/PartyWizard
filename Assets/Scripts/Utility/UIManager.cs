@@ -246,8 +246,13 @@ public class UIManager : MonoBehaviour
         if (input > 0f)
         {
             m_highlightedEnemy++;
-            if (m_highlightedEnemy > CombatManager.Instance.currentEncounter.Enemies.Length)
-                m_highlightedEnemy = 0;
+            while (m_currentEnemies[m_highlightedEnemy].IsDead)
+            {
+                m_highlightedEnemy++; 
+				if (m_highlightedEnemy > CombatManager.Instance.currentEncounter.Enemies.Length)
+                    m_highlightedEnemy = 0;
+            }
+
             m_enemySelector.SelectEnemy(CombatManager.Instance.currentEncounter.Enemies[m_highlightedEnemy].gameObject.transform);
 
         }
@@ -255,8 +260,13 @@ public class UIManager : MonoBehaviour
         if (input < 0f)
         {
             m_highlightedEnemy--;
-            if (m_highlightedEnemy < 0)
-                m_highlightedEnemy = CombatManager.Instance.currentEncounter.Enemies.Length - 1;
+            while (m_currentEnemies[m_highlightedEnemy].IsDead)
+            {
+                m_highlightedEnemy--;
+                if (m_highlightedEnemy < 0)
+					m_highlightedEnemy = CombatManager.Instance.currentEncounter.Enemies.Length - 1;
+            }
+            
             m_enemySelector.SelectEnemy(CombatManager.Instance.currentEncounter.Enemies[m_highlightedEnemy].gameObject.transform);
 
         }
@@ -287,6 +297,7 @@ public class UIManager : MonoBehaviour
     {
 		CombatManager combatManager = CombatManager.Instance;
 
+		// Perform attack on enemy
 		combatManager.AttackEntity(combatManager.Player, m_currentEnemies[m_highlightedEnemy], attackData);
 
 		DisplayPlayerOptions(false); // TO-DO: this can probably be removed
