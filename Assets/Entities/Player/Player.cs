@@ -5,16 +5,17 @@ using UnityEngine.Splines;
 [RequireComponent(typeof(Rigidbody))]
 public class Player : Entity
 {
-	// Stats
-	public int Adrenaline { get; private set; }
-	public int MaxAdrenaline { get; private set; } = 10;
-
 	// Movement constants
 	private const float k_acceleration = 4f;
 	private const float k_maxSpeed = 3f;
 	private const float k_rotSpeed = 10f;
 	private const float k_brakeForce = 5f;
 	private const float k_stopThreshold = 0.5f;
+
+	// Magic
+	public int MaxAdrenaline { get; private set; } = 10;
+
+	[SerializeField] private SO_Attack[] m_playerSpellPool;
 
 	// Rails
 	[SerializeField] private SplineContainer m_railNetwork;
@@ -23,10 +24,16 @@ public class Player : Entity
 	private Rigidbody m_rb;
 
 	// System
+	public int Adrenaline { get; private set; }
+	public SO_Attack CurrentSpell { get; private set; }
+
 	private Vector3 m_velocity;
 	private bool m_isAccelerating = false;
 	private bool m_isBraking = false;
 	private bool m_isStopped = false;
+
+
+	#region Initialization methods
 
 	private void Awake()
 	{
@@ -41,16 +48,19 @@ public class Player : Entity
 	{
 		base.Start();
 
-		CombatManager.Instance.OnNavigationBegin += StartMovement;
+		CombatManager.Instance.OnEncounterEnd += StartMovement;
 		StartMovement();
+
+		AssignRandomSpell();
 	}
+	#endregion
 
 	public override void Die()
 	{
 		Debug.Log("Player is dead");
 	}
 
-	#region Adrenaline
+	#region Magic
 
 	public void SetAdrenaline(int value)
 	{
@@ -58,6 +68,22 @@ public class Player : Entity
 	}
 
 	public void RemoveAdrenaline(int value) => SetAdrenaline(Adrenaline - value);
+
+	public void SetCurrentSpell(SO_Attack value)
+	{
+		CurrentSpell = value;
+		Debug.Log(value.AttackName);
+	}
+
+	public void AssignRandomSpell()
+	{
+		if (m_playerSpellPool.Length <= 0)
+			return;
+
+		int rand = UnityEngine.Random.Range(0, m_playerSpellPool.Length);
+		SO_Attack spell = m_playerSpellPool[rand];
+		SetCurrentSpell(spell);
+	}
 	#endregion
 
 	private void FixedUpdate()
@@ -78,7 +104,7 @@ public class Player : Entity
 
 	#region Physics
 
-	public void StartMovement()
+	public void StartMovement(Encounter encounter = null)
 	{
 		m_isAccelerating = true;
 		m_isBraking = false;

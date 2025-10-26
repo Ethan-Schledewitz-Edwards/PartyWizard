@@ -1,11 +1,18 @@
+using System;
 using UnityEngine;
 
 public abstract class Entity : MonoBehaviour
 {
+	[Header("Stats")]
 	public int Health { get; private set; }
 	public int MaxHealth { get; private set; } = 10;
 
+	[Header("Attacks")]
+	[field: SerializeField] public SO_Attack[] BaseAttacks { get; protected set; }
+
+	// System
 	public bool IsDead;
+	public Action<Entity> OnDeath;
 
 	protected virtual void Start()
 	{
@@ -19,6 +26,8 @@ public abstract class Entity : MonoBehaviour
 		if(Health <= 0)
 		{
 			IsDead = true;
+			OnDeath?.Invoke(this);
+
 			Die();
 		}
 	}

@@ -139,7 +139,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03e07a80cfc36ce42ada4557fb083a17, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Player
+  IsDead: 0
+  m_playerSpellPool:
+  - {fileID: 11400000, guid: 2c9d1d60dac8bc042903aa20f0643ec3, type: 2}
+  - {fileID: 11400000, guid: 2795bf68605b3fb46bf91657d695752e, type: 2}
+  - {fileID: 11400000, guid: 13bb03d16ac0d9e4e8988d889a2ee80d, type: 2}
+  - {fileID: 11400000, guid: 02bbc3767084f914d9c450d4a65cab66, type: 2}
+  - {fileID: 11400000, guid: 3fe4b7ecaee8a894a8ca593bd16517d4, type: 2}
+  - {fileID: 11400000, guid: 88fe2a3cd5249124daf1981206b6fd9c, type: 2}
+  - {fileID: 11400000, guid: 2130181904dc55d4ca26f533ca3a0a66, type: 2}
   m_railNetwork: {fileID: 0}
+  CurrentSpell: {fileID: 11400000, guid: aab800135ee003f40a79b1c5a50601c3, type: 2}
 --- !u!54 &405875074165169085
 Rigidbody:
   m_ObjectHideFlags: 0

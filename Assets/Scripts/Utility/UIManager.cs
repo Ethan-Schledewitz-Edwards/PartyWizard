@@ -1,87 +1,167 @@
-using System.Collections.Generic;
+using System;
+using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UIElements;
 
 public class UIManager : MonoBehaviour
 {
-    [SerializeField] private GameObject UI;
-    [SerializeField] private GameObject basePanel;
-    [SerializeField] private GameObject spellPanel;
-    [SerializeField] private GameObject itemPanel;
+	public static UIManager Instance;
 
-    public Enemy[] currentEnemies;
+	[Header("Player Options")]
+	[SerializeField] private GameObject m_canvas;
+	[SerializeField] private GameObject m_playerOptions;
+    [SerializeField] private GameObject m_basePanel;
+    [SerializeField] private GameObject m_itemPanel;
+	[SerializeField] private SpellButton m_spellButton;
+	[SerializeField] private Slider m_adrenalineSlider;
 
-    private Encounter currentEncounter;
+	[Header("Text Box")]
+	[SerializeField] private GameObject m_textPanel;
+	[SerializeField] private TextMeshProUGUI m_textBox;
 
-    private void Start()
-    {
-        UI.SetActive(false);
+	// System
+	private Encounter m_currentEncounter;
+	private Enemy[] m_currentEnemies;
 
-        basePanel.SetActive(true);
-        spellPanel.SetActive(false);
-        itemPanel.SetActive(false);
+	public bool IsTextPrinting { get; private set; }
+	public Action OnTextFinished;
 
-        CombatManager.Instance.OnEncounterBegin += BeginEncounter;
-    }
+	#region Initialization
 
-    private void Update()
+	private void Awake()
+	{
+		if (Instance == null)
+			Instance = this;
+		else
+			Destroy(this);
+	}
+
+	private void Start()
+	{
+		m_canvas.SetActive(false);
+		m_playerOptions.SetActive(false);
+		m_basePanel.SetActive(true);
+		m_itemPanel.SetActive(false);
+		m_textPanel.SetActive(false);
+
+		CombatManager.Instance.OnEncounterBegin += BeginEncounter;
+		CombatManager.Instance.OnEncounterEnd += EndEncounter;
+		CombatManager.Instance.OnAttackPerformed += DisplayTextPanel;
+	}
+	#endregion
+
+	private void Update()
     {
         if (Keyboard.current.escapeKey.wasPressedThisFrame)
         {
-            if (!basePanel.activeInHierarchy)
+            if (!m_basePanel.activeInHierarchy)
             {
-                basePanel.SetActive(true);
-                spellPanel.SetActive(false);
-                itemPanel.SetActive(false);
+				m_basePanel.SetActive(true);
+				m_itemPanel.SetActive(false);
             }
         }
     }
 
-    private void BeginEncounter(Encounter encounter)
-    {
-        currentEncounter = encounter;
-		currentEnemies = encounter.Enemies;
+	#region Combat State
 
-		UI.SetActive(true);
+	private void BeginEncounter(Encounter encounter)
+    {
+        m_currentEncounter = encounter;
+		m_currentEnemies = encounter.Enemies;
+
+		m_canvas.SetActive(true);
+		DisplayPlayerOptions(true);
 	}
 
-    #region Base Panel
+	private void EndEncounter(Encounter encounter)
+	{
+		m_canvas.SetActive(false);
+		DisplayPlayerOptions(false);
+		DoneText();
+	}
 
-    public void Attack()
+	public void DisplayTextPanel(string text)
+	{
+		DisplayPlayerOptions(false);
+		m_textPanel.SetActive(true);
+
+		StopAllCoroutines();
+		IsTextPrinting = true;
+		StartCoroutine(TypeText(text));
+	}
+
+	private IEnumerator TypeText(string text)
+	{
+		m_textBox.text = "";
+		foreach (char c in text)
+		{
+			m_textBox.text += c;
+			yield return new WaitForSeconds(0.03f);// typing speed
+		}
+
+		DoneText();
+	}
+
+	public void DoneText()
+	{
+		IsTextPrinting = false;
+		m_textPanel.SetActive(true);
+		OnTextFinished?.Invoke();
+	}
+	#endregion
+
+	public void DisplayPlayerOptions(bool isActive)
+	{
+		m_playerOptions.SetActive(isActive);
+
+		if (isActive)
+			ResetPlayerOptions();
+	}
+
+	private void ResetPlayerOptions()
+	{
+		m_basePanel.SetActive(true);
+		m_itemPanel.SetActive(false);
+
+		Player player = CombatManager.Instance.Player;
+		m_spellButton.SetSpell(player.CurrentSpell);
+	}
+
+	#region Player Options
+
+	public void AttackButton()
     {
-        
+		CombatManager combatManager = CombatManager.Instance;
+		Player player = combatManager.Player;
+
+		// The player should only ever have punch by default
+		UseAttack(player.BaseAttacks[0]);
     }
 
-    public void Spell()
-    {
-        basePanel.SetActive(false);
-        spellPanel.SetActive(true);
-        itemPanel.SetActive(false);
-    }
-
-    public void Guard()
+	public void GuardButton()
     {
         // TO-DO: Guard
     }
 
-    public void Item()
+    public void ItemButton()
     {
-        basePanel.SetActive(false);
-        spellPanel.SetActive(false);
-        itemPanel.SetActive(true);
-    }
+		ResetPlayerOptions();
+	}
 
     #endregion
     
-    public void Cast(string spell)
+    public void UseAttack(SO_Attack attackData)
     {
-        // TO-DO: cast spells
-    }
+		CombatManager combatManager = CombatManager.Instance;
+		combatManager.AttackEntity(combatManager.Player, m_currentEnemies[0], attackData);// To-Do: use the highlighted enemy
 
-    public void Back()
+		DisplayPlayerOptions(false);
+	}
+
+    public void BackButton()
     {
-        basePanel.SetActive(true);
-        spellPanel.SetActive(false);
-        itemPanel.SetActive(false);
-    }
+		ResetPlayerOptions();
+	}
 }
