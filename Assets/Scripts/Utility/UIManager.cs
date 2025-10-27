@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -58,7 +57,6 @@ public class UIManager : MonoBehaviour
 	private Enemy[] m_currentEnemies;
 	private int m_highlightedEnemy;
 	private bool m_isPickingSpell;
-	private bool m_shouldHealAfterSpin;
 
 	public bool IsPrintingTextQueue { get; private set; }
 
@@ -205,6 +203,7 @@ public class UIManager : MonoBehaviour
 
 		// Refresh health and adrenaline bars
 		m_healthSlider.value = player.Health;
+		m_healthSlider.maxValue = player.MaxHealth;
 		m_adrenalineSlider.value = player.Adrenaline;
 	}
 
@@ -251,19 +250,10 @@ public class UIManager : MonoBehaviour
 
 			// Select new spell
 			CombatManager.Instance.Player.AssignRandomSpell(out SO_Attack spell);
-			AddStringToTextQueue($"You missed the bullet... your adrenaline has been restored.");
-			AddStringToTextQueue($"You learned {spell.AttackName}!");
+			AddStringToTextQueue($"You missed the bullet... and learned {spell.AttackName}!");
+			PlayTextQueue();
 
-			if (m_shouldHealAfterSpin)
-			{
-				m_shouldHealAfterSpin = false;
-				DoRandHeal();
-			}
-			else
-			{
-				m_isPickingSpell = false;
-				OnSpellScreenEnd?.Invoke();
-			}
+			DoRandHeal();
 		}
 		else
 		{
@@ -370,7 +360,6 @@ public class UIManager : MonoBehaviour
 	public void YuhButton()
 	{
 		m_spellScreen.SetActive(false);
-		m_shouldHealAfterSpin = true;
 		StartCoroutine(WaitAndSpinWheel());
 	}
 
@@ -380,12 +369,14 @@ public class UIManager : MonoBehaviour
 		DoRandHeal();
 	}
 
+	private int m_lastJokeIndex = -1;
 	private void DoRandHeal()
 	{
 		float randHealChance = UnityEngine.Random.Range(0f, 1f);
-		if (randHealChance > 0.65f)
+		Debug.Log(randHealChance);
+		if (randHealChance > .5f)
 		{
-			int healAmount = UnityEngine.Random.Range(1, 5);
+			int healAmount = UnityEngine.Random.Range(2, 6);
 			CombatManager.Instance.Player.AddHealth(healAmount);
 
 			string[] jokes =
@@ -395,7 +386,15 @@ public class UIManager : MonoBehaviour
 				"A can of malicious brew rolls your way... you take a sip.",
 				"You find a rolled parchment stuffed with glowing herbs. You light it and put it to your mouth."
 			};
-			string randomLine = jokes[UnityEngine.Random.Range(0, jokes.Length)];
+
+			int randomIndex;
+			do
+			{
+				randomIndex = UnityEngine.Random.Range(0, jokes.Length);
+			} while (randomIndex == m_lastJokeIndex && jokes.Length > 1);
+
+			m_lastJokeIndex = randomIndex;
+			string randomLine = jokes[randomIndex];
 
 			AddStringToTextQueue(randomLine);
 			AddStringToTextQueue($"You regained {healAmount} health!");
@@ -403,6 +402,12 @@ public class UIManager : MonoBehaviour
 		}
 		else
 		{
+			if (m_stringsToType.Count > 0)
+			{
+				PlayTextQueue();
+				return;
+			}
+
 			m_isPickingSpell = false;
 			OnSpellScreenEnd?.Invoke();
 		}

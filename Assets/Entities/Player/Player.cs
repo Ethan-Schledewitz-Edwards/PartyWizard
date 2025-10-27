@@ -59,6 +59,9 @@ public class Player : Entity
 		UIManager.Instance.OnSpellScreenEnd += StartMovement;
 		StartMovement();
 
+		MaxHealth = 20;
+		SetHealth(20);
+
 		AssignRandomSpell(out _);
 	}
 	#endregion

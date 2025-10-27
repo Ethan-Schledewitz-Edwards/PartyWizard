@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Attack_AcidSpray
   m_EditorClassIdentifier: Assembly-CSharp::SO_Attack
   <AttackName>k__BackingField: Acid Spray
-  <Damage>k__BackingField: 10
-  <AdrenalineCost>k__BackingField: 10
+  <Damage>k__BackingField: 6
+  <AdrenalineCost>k__BackingField: 4
   <AttackDuration>k__BackingField: 1
   <SoundEffect>k__BackingField: {fileID: 8300000, guid: d2d832476f8b6a742a61899985419617, type: 3}
   <ParticleSystem>k__BackingField: {fileID: 0}
