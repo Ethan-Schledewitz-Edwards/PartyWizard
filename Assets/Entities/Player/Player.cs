@@ -13,6 +13,7 @@ public class Player : Entity
 	private const float k_stopThreshold = 0.5f;
 
 	// Magic
+	[SerializeField] private SO_Attack baseAttack;
 	public int MaxAdrenaline { get; private set; } = 10;
 
 	[SerializeField] private SO_Attack[] m_playerSpellPool;
@@ -42,6 +43,11 @@ public class Player : Entity
 		m_rb.isKinematic = true;
 
 		m_currentSpline = m_railNetwork != null ? m_railNetwork.Splines[0] : null;
+
+		BaseAttacks = new SO_Attack[]
+		{
+			baseAttack
+		};
 	}
 
 	protected override void Start()
@@ -50,10 +56,10 @@ public class Player : Entity
 
 		Adrenaline = MaxAdrenaline;
 
-		CombatManager.Instance.OnEncounterEnd += StartMovement;
+		UIManager.Instance.OnSpellScreenEnd += StartMovement;
 		StartMovement();
 
-		AssignRandomSpell();
+		AssignRandomSpell(out _);
 	}
 	#endregion
 
@@ -83,13 +89,10 @@ public class Player : Entity
 		Debug.Log(value.AttackName);
 	}
 
-	public void AssignRandomSpell()
+	public void AssignRandomSpell(out SO_Attack spell)
 	{
-		if (m_playerSpellPool.Length <= 0)
-			return;
-
 		int rand = UnityEngine.Random.Range(0, m_playerSpellPool.Length);
-		SO_Attack spell = m_playerSpellPool[rand];
+		spell = m_playerSpellPool[rand];
 		SetCurrentSpell(spell);
 	}
 	#endregion
@@ -112,7 +115,7 @@ public class Player : Entity
 
 	#region Physics
 
-	public void StartMovement(Encounter encounter = null)
+	public void StartMovement()
 	{
 		m_isAccelerating = true;
 		m_isBraking = false;

@@ -2,11 +2,13 @@ using UnityEngine;
 
 public class Enemy : Entity
 {
-	[SerializeField] private SO_EnemyStats m_baseStats;
+	[field: SerializeField] public SO_EnemyStats BaseStats { get; private set; }
 
 	private void Awake()
 	{
-		BaseAttacks = m_baseStats.Attacks;
+		MaxHealth = BaseStats.BaseHealth;
+		SetHealth(BaseStats.BaseHealth);
+		BaseAttacks = BaseStats.Attacks;
 	}
 
 	public override void Die()

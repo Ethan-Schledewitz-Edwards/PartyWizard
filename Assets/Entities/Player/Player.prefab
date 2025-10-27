@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3244530091896292626}
   - component: {fileID: 8849991043581046193}
   - component: {fileID: 4622046825949163037}
+  - component: {fileID: 3684846393869507965}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -115,6 +116,18 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &3684846393869507965
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4724016174342438139}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 652cd443c0a1ce746a14e5b3621bfbd6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
 --- !u!1 &5467183630149920940
 GameObject:
   m_ObjectHideFlags: 0
@@ -162,8 +175,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03e07a80cfc36ce42ada4557fb083a17, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Player
-  <BaseAttacks>k__BackingField:
-  - {fileID: 11400000, guid: aab800135ee003f40a79b1c5a50601c3, type: 2}
+  baseAttack: {fileID: 11400000, guid: aab800135ee003f40a79b1c5a50601c3, type: 2}
   m_playerSpellPool:
   - {fileID: 11400000, guid: 2c9d1d60dac8bc042903aa20f0643ec3, type: 2}
   - {fileID: 11400000, guid: 2795bf68605b3fb46bf91657d695752e, type: 2}

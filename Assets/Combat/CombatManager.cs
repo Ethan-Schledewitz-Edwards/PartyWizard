@@ -9,9 +9,6 @@ public class CombatManager : MonoBehaviour
 	[field: SerializeField] public Player Player {  get; private set; }
 	[SerializeField] private Encounter[] m_encounters;
 
-	// System
-	private int encounterIndex;
-	public Encounter currentEncounter;
 
 	// Events
 	public Action<Encounter> OnEncounterBegin;
@@ -19,8 +16,12 @@ public class CombatManager : MonoBehaviour
 	public Action OnPlayerPhaseEnd;
 	public Action<Encounter> OnEncounterEnd;
 
-	private bool isPlayerPhase;
-	private int enemiesProcessed;// Used for enemy attack phase
+	// System
+	private int m_encounterIndex;
+	public Encounter m_currentEncounter { get; private set; }
+
+	private bool m_isPlayerPhase;
+	private int m_enemiesProcessed;// Used for enemy attack phase
 
 
 	#region Initialization Methods
@@ -35,7 +36,7 @@ public class CombatManager : MonoBehaviour
 
 	private void Start()
 	{
-		encounterIndex = -1;
+		m_encounterIndex = -1;
 	}
 
 	#endregion
@@ -46,26 +47,24 @@ public class CombatManager : MonoBehaviour
 	{
 		Player.SetIsGuarding(false);
 
-		currentEncounter = m_encounters[encounterID];
-		OnEncounterBegin?.Invoke(currentEncounter);
+		m_currentEncounter = m_encounters[encounterID];
+		OnEncounterBegin?.Invoke(m_currentEncounter);
 
 		StartPlayerTurn();
 	}
 
-	private void FinishEncounter()
+	private void DefeatedEncounter()
 	{
-		OnEncounterEnd?.Invoke(currentEncounter);
-		currentEncounter = null;
-
-		Player.AssignRandomSpell();
+		OnEncounterEnd?.Invoke(m_currentEncounter);
+		m_currentEncounter = null;
 	}
 
 	public void AdvanceEncouner()
 	{
-		encounterIndex++;
+		m_encounterIndex++;
 
-		if (encounterIndex < m_encounters.Length)
-			BeginEncounter(encounterIndex);
+		if (m_encounterIndex < m_encounters.Length)
+			BeginEncounter(m_encounterIndex);
 	}
 
 	#endregion
@@ -76,7 +75,7 @@ public class CombatManager : MonoBehaviour
 	{
 		Debug.Log("Player turn start");
 
-		isPlayerPhase = true;
+		m_isPlayerPhase = true;
 		UIManager.Instance.DisplayPlayerOptions(true);
 	}
 
@@ -84,19 +83,19 @@ public class CombatManager : MonoBehaviour
 	{
 		Debug.Log("Player turn end");
 
-		isPlayerPhase = false;
-		enemiesProcessed = 0;
+		m_isPlayerPhase = false;
+		m_enemiesProcessed = 0;
 		ProcessEntityTurn();
 	}
 
 	public void ProcessEntityTurn()
 	{
-		if (isPlayerPhase)
+		if (m_isPlayerPhase)
 			return;
 
 		// Check if all enemies are dead
 		bool isEncounterDefeated = true;
-		foreach (Enemy i in currentEncounter.Enemies)
+		foreach (Enemy i in m_currentEncounter.Enemies)
 		{
 			if (!i.IsDead)
 			{
@@ -107,23 +106,28 @@ public class CombatManager : MonoBehaviour
 
 		if (isEncounterDefeated)
 		{
-			FinishEncounter();
+			DefeatedEncounter();
 			return;
 		}
 
 
 		// If all enemies acted, return to player phase
-		if (enemiesProcessed >= currentEncounter.Enemies.Length)
+		if (m_enemiesProcessed >= m_currentEncounter.Enemies.Length)
 		{
 			StartPlayerTurn();
 			return;
 		}
 
-		Enemy enemy = currentEncounter.Enemies[enemiesProcessed];
+		Enemy enemy = m_currentEncounter.Enemies[m_enemiesProcessed];
+
+		if (enemy.BaseStats.IsBoss)
+		{
+			UIManager.Instance.Won();
+		}
 
 		if (enemy.IsDead)
 		{
-			enemiesProcessed++;
+			m_enemiesProcessed++;
 			ProcessEntityTurn();
 			return;
 		}
@@ -180,9 +184,9 @@ public class CombatManager : MonoBehaviour
 		// Delay
 		yield return new WaitForSeconds(.5f);
 
-		if (!isPlayerPhase)
+		if (!m_isPlayerPhase)
 		{
-			enemiesProcessed++;
+			m_enemiesProcessed++;
 			ProcessEntityTurn();
 		}
 		else
@@ -203,9 +207,9 @@ public class CombatManager : MonoBehaviour
 		// Delay
 		yield return new WaitForSeconds(.5f);
 
-		if (!isPlayerPhase)
+		if (!m_isPlayerPhase)
 		{
-			enemiesProcessed++;
+			m_enemiesProcessed++;
 			ProcessEntityTurn();
 		}
 		else

@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Kingpin_Stats
   m_EditorClassIdentifier: Assembly-CSharp::SO_EnemyStats
   <EnemyName>k__BackingField: Kingpin
-  <BaseHealth>k__BackingField: 20
+  <BaseHealth>k__BackingField: 14
   <Attacks>k__BackingField:
-  - {fileID: 11400000, guid: aab800135ee003f40a79b1c5a50601c3, type: 2}
+  - {fileID: 11400000, guid: b5158e164f683d64b87b9b421cb6826e, type: 2}
+  <IsBoss>k__BackingField: 0

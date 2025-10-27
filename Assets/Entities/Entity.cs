@@ -5,10 +5,10 @@ public abstract class Entity : MonoBehaviour
 {
 	[Header("Stats")]
 	public int Health { get; private set; }
-	public int MaxHealth { get; private set; } = 10;
+	public int MaxHealth { get; protected set; } = 10;
 
 	[Header("Attacks")]
-	[field: SerializeField] public SO_Attack[] BaseAttacks { get; protected set; }
+	public SO_Attack[] BaseAttacks { get; protected set; }
 
 	// System
 	public bool IsGuarding { get; private set; } = false;

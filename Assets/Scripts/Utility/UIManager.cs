@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -9,46 +11,54 @@ public class UIManager : MonoBehaviour
 {
 	public static UIManager Instance;
 
-	[Header("Player Options")]
+	[Header("Canvas")]
 	[SerializeField] private GameObject m_canvas;
+
+	[Header("Player Options Panel")]
 	[SerializeField] private GameObject m_playerOptions;
-    [SerializeField] private GameObject m_basePanel;
 	[SerializeField] private SpellButton m_spellButton;
 	[SerializeField] private Slider m_healthSlider;
 	[SerializeField] private Slider m_adrenalineSlider;
-	[SerializeField] private SpinningWheel m_spinningwheel;
-	[SerializeField] private GameObject m_rollScreen;
 
+	[Header("Options Panel Effects")]
 	[SerializeField] private EnemySelector m_enemySelector;
 	[SerializeField] private EnemySelector m_particleEffects;
 	[SerializeField] private ParticleSystem m_particleSystem;
-	[SerializeField] private AudioSource m_sfxSource;
 
-	[Header("Text Box")]
+	[Header("Wheel screen")]
+	[SerializeField] private SpinningWheel m_spinningwheel;
+
+	[Header("Spell screen")]
+	[SerializeField] private GameObject m_spellScreen;
+
+	[Header("Text Screen")]
 	[SerializeField] private GameObject m_textPanel;
 	[SerializeField] private TextMeshProUGUI m_textBox;
 
-	[Header("GameStates")]
+	[Header("Game State Screens")]
 	[SerializeField] private GameObject m_whiteLightPanel;
 	[SerializeField] private GameObject m_gameOverPanel;
 	[SerializeField] private GameObject m_playerWonPanel;
 
 	[Header("Audio")]
-	[SerializeField] private AudioSource m_audioSource;
+	[SerializeField] private AudioSource m_sfxSource;
 	[SerializeField] private AudioSource m_musicSource;// Bad
 	[SerializeField] private AudioClip m_ringing;
 	[SerializeField] private AudioClip m_death;
 	[SerializeField] private AudioClip m_won;
 
-	[HideInInspector] public SO_Attack m_selectedAttack;
+	private SO_Attack m_currentAttack;
 	private InputSystem_Actions m_inputActions;
 
-    // System
-    private Queue<string> m_stringsToType;
+	// Events
+	public Action OnSpellScreenEnd;
+
+	// System
+	private Queue<string> m_stringsToType;
 	private Enemy[] m_currentEnemies;
 	private int m_highlightedEnemy;
-
-	private bool isPickingSPELL;
+	private bool m_isPickingSpell;
+	private bool m_shouldHealAfterSpin;
 
 	public bool IsPrintingTextQueue { get; private set; }
 
@@ -70,7 +80,6 @@ public class UIManager : MonoBehaviour
 
 		m_canvas.SetActive(false);
 		m_playerOptions.SetActive(false);
-		m_basePanel.SetActive(true);
 		m_textPanel.SetActive(false);
 		m_spinningwheel.gameObject.SetActive(false);
 
@@ -106,11 +115,10 @@ public class UIManager : MonoBehaviour
 
 	private void EndEncounter(Encounter encounter)
 	{
-		m_canvas.SetActive(false);
+		m_canvas.SetActive(true);
 		DisplayPlayerOptions(false);
 		HideTextPanel();
-
-		ShowRollScreen();
+		ShowSpellSelectScreen();
 	}
 
 	#endregion
@@ -150,6 +158,13 @@ public class UIManager : MonoBehaviour
 
 		HideTextPanel();
 		IsPrintingTextQueue = false;
+
+		// Execute after new spell was rolled and text finished
+		if (m_isPickingSpell)
+		{
+			m_isPickingSpell = false;
+			OnSpellScreenEnd?.Invoke();
+		}
 	}
 
 	private IEnumerator TypeText(string text)
@@ -182,7 +197,6 @@ public class UIManager : MonoBehaviour
 
 	private void ResetPlayerOptions()
 	{
-		m_basePanel.SetActive(true);
 		m_spinningwheel.gameObject.SetActive(false);
 
 		// Refresh current spell
@@ -201,7 +215,7 @@ public class UIManager : MonoBehaviour
 		CombatManager combatManager = CombatManager.Instance;
 		Player player = combatManager.Player;
 
-		m_selectedAttack = player.BaseAttacks[0];
+		SetCurentAttack(player.BaseAttacks[0]);
 		SelectEnemy();
     }
 
@@ -228,23 +242,28 @@ public class UIManager : MonoBehaviour
 		m_spinningwheel.Spin();
 	}
 
-	private void FireBullet()
-	{
-		m_whiteLightPanel.SetActive(true);
-
-		// Play tinitus ringing sound
-		m_audioSource.PlayOneShot(m_ringing);
-		m_musicSource.Stop();
-	}
-
 	private void RechargeAdrenaline()
 	{
-		if (isPickingSPELL)
+		if (m_isPickingSpell)
 		{
-			DisplayPlayerOptions(false);
 			m_spinningwheel.gameObject.SetActive(false);
-			m_rollScreen.SetActive(false);
-			isPickingSPELL = false;
+			m_spellScreen.SetActive(false);
+
+			// Select new spell
+			CombatManager.Instance.Player.AssignRandomSpell(out SO_Attack spell);
+			AddStringToTextQueue($"You missed the bullet... your adrenaline has been restored.");
+			AddStringToTextQueue($"You learned {spell.AttackName}!");
+
+			if (m_shouldHealAfterSpin)
+			{
+				m_shouldHealAfterSpin = false;
+				DoRandHeal();
+			}
+			else
+			{
+				m_isPickingSpell = false;
+				OnSpellScreenEnd?.Invoke();
+			}
 		}
 		else
 		{
@@ -258,7 +277,12 @@ public class UIManager : MonoBehaviour
 
 	#endregion
 
-	#region Enemy Selection
+	#region Combat
+
+	public void SetCurentAttack(SO_Attack newAttack)
+	{
+		m_currentAttack = newAttack;
+	}
 
 	private float m_selectionTime; // TO-DO: very bad solution, need a better way to offset whether selection is performed while within enemy selection
     public void SelectEnemy()
@@ -268,7 +292,7 @@ public class UIManager : MonoBehaviour
         DisplayPlayerOptions(false);
         m_enemySelector.gameObject.SetActive(true);
         m_highlightedEnemy = 0;
-        m_enemySelector.SelectEnemy(CombatManager.Instance.currentEncounter.Enemies[m_highlightedEnemy].gameObject.transform);
+        m_enemySelector.SelectEnemy(CombatManager.Instance.m_currentEncounter.Enemies[m_highlightedEnemy].gameObject.transform);
 
 		m_inputActions.UI.Enable();
     }
@@ -280,17 +304,17 @@ public class UIManager : MonoBehaviour
         if (input > 0f)
         {
             m_highlightedEnemy++;
-            if (m_highlightedEnemy > CombatManager.Instance.currentEncounter.Enemies.Length - 1)
+            if (m_highlightedEnemy > CombatManager.Instance.m_currentEncounter.Enemies.Length - 1)
                 m_highlightedEnemy = 0;
 			
             while (m_currentEnemies[m_highlightedEnemy].IsDead)
             {
                 m_highlightedEnemy++; 
-				if (m_highlightedEnemy > CombatManager.Instance.currentEncounter.Enemies.Length - 1)
+				if (m_highlightedEnemy > CombatManager.Instance.m_currentEncounter.Enemies.Length - 1)
                     m_highlightedEnemy = 0;
             }
 
-            m_enemySelector.SelectEnemy(CombatManager.Instance.currentEncounter.Enemies[m_highlightedEnemy].gameObject.transform);
+            m_enemySelector.SelectEnemy(CombatManager.Instance.m_currentEncounter.Enemies[m_highlightedEnemy].gameObject.transform);
 
         }
 
@@ -298,16 +322,16 @@ public class UIManager : MonoBehaviour
         {
             m_highlightedEnemy--;
             if (m_highlightedEnemy < 0)
-                m_highlightedEnemy = CombatManager.Instance.currentEncounter.Enemies.Length - 1;
+                m_highlightedEnemy = CombatManager.Instance.m_currentEncounter.Enemies.Length - 1;
 
             while (m_currentEnemies[m_highlightedEnemy].IsDead)
             {
                 m_highlightedEnemy--;
                 if (m_highlightedEnemy < 0)
-					m_highlightedEnemy = CombatManager.Instance.currentEncounter.Enemies.Length - 1;
+					m_highlightedEnemy = CombatManager.Instance.m_currentEncounter.Enemies.Length - 1;
             }
             
-            m_enemySelector.SelectEnemy(CombatManager.Instance.currentEncounter.Enemies[m_highlightedEnemy].gameObject.transform);
+            m_enemySelector.SelectEnemy(CombatManager.Instance.m_currentEncounter.Enemies[m_highlightedEnemy].gameObject.transform);
 
         }
     }
@@ -321,7 +345,8 @@ public class UIManager : MonoBehaviour
 			m_enemySelector.gameObject.SetActive(false);
 			m_inputActions.UI.Disable();
 
-			UseAttack(m_selectedAttack);
+			UseAttack(m_currentAttack);
+			m_currentAttack = null;
 		}
     }
 
@@ -332,41 +357,89 @@ public class UIManager : MonoBehaviour
 
         DisplayPlayerOptions(true);
     }
-    #endregion
+	#endregion
 
-	public void ShowRollScreen()
+	#region Spell Selection
+
+	private void ShowSpellSelectScreen()
 	{
-		m_rollScreen.SetActive(true);
+		m_spellScreen.SetActive(true);
+		m_isPickingSpell = true;
 	}
 
 	public void YuhButton()
 	{
-		m_rollScreen.SetActive(false);
+		m_spellScreen.SetActive(false);
+		m_shouldHealAfterSpin = true;
 		StartCoroutine(WaitAndSpinWheel());
 	}
 
 	public void NahButton()
 	{
-		m_rollScreen.SetActive(false);
+		m_spellScreen.SetActive(false);
+		DoRandHeal();
+	}
 
-		// Move player
+	private void DoRandHeal()
+	{
+		float randHealChance = UnityEngine.Random.Range(0f, 1f);
+		if (randHealChance > 0.65f)
+		{
+			int healAmount = UnityEngine.Random.Range(1, 5);
+			CombatManager.Instance.Player.AddHealth(healAmount);
+
+			string[] jokes =
+			{
+				"Yo, that wizard dropped some arcane amphetamines!",
+				"The foe dropped some elvin moon dust... a puff of crystal dust fills air.",
+				"A can of malicious brew rolls your way... you take a sip.",
+				"You find a rolled parchment stuffed with glowing herbs. You light it and put it to your mouth."
+			};
+			string randomLine = jokes[UnityEngine.Random.Range(0, jokes.Length)];
+
+			AddStringToTextQueue(randomLine);
+			AddStringToTextQueue($"You regained {healAmount} health!");
+			PlayTextQueue();
+		}
+		else
+		{
+			m_isPickingSpell = false;
+			OnSpellScreenEnd?.Invoke();
+		}
+	}
+
+	#endregion
+
+	#region Final Game Screens
+
+	private void FireBullet()
+	{
+		m_whiteLightPanel.SetActive(true);
+
+		// Play tinitus ringing sound
+		m_sfxSource.PlayOneShot(m_ringing);
+		m_musicSource.Stop();
 	}
 
 	public void GameOver()
 	{
 		m_gameOverPanel.SetActive(true);
-		m_audioSource.PlayOneShot(m_death);
+
+		m_sfxSource.PlayOneShot(m_death);
 		m_musicSource.Stop();
 	}
 
 	public void Won()
 	{
 		m_playerWonPanel.SetActive(true);
-		m_audioSource.PlayOneShot(m_won);
+
+		m_sfxSource.PlayOneShot(m_won);
 		m_musicSource.Stop();
 	}
 
-	public void UseAttack(SO_Attack attackData)
+	#endregion
+
+	private void UseAttack(SO_Attack attackData)
     {
 		CombatManager combatManager = CombatManager.Instance;
 
